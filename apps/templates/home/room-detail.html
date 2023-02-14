@@ -1,0 +1,156 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Room Detail {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="/rooms">Rooms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">IoT Lab</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral">View live camera</a>
+              <a href="#" class="btn btn-sm btn-danger">Lock door</a>
+            </div>
+          </div>
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Last unlocked</h5>
+                      <span class="h2 font-weight-bold mb-0">Ona Demuytere</span>
+                    </div>
+
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">Today, 10:03:29</span>
+                  </p>
+                    <p class="mt-3 mb-0 text-sm">
+                      <div class="col d-flex justify-content-center">
+                        <a href="/history-room" class="btn btn-sm btn-primary">View history</a>
+                      </div>
+                    </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-white mb-0">Schemes</h5>
+                </div>
+                <div class="col">
+                  <ul class="nav nav-pills justify-content-end">
+                      <a href="#" class="btn btn-sm btn-primary py-1 px-3">Add scheme</a>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+             <!-- here the groups -->
+              <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">IoT Lab</h5>
+                      <span class="h2 font-weight-bold mb-0">Teachers</span>
+                    </div>
+
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">
+                      Monday: / <br>
+                      Tuesday: / <br>
+                      Wednesday: 10:00 - 12:00 and 16:00 - 20:00 <br>
+                      Thursday: / <br>
+                      Friday: / <br>
+                      Saturday: / <br>
+                      Sunday: / <br>
+                    </span>
+                  </p>
+                    <p class="mt-3 mb-0 text-sm">
+                      <div class="col d-flex justify-content-center">
+                        <a href="#!" class="btn btn-sm btn-secundary">Edit</a>
+                      </div>
+                    </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">IoT Lab</h5>
+                      <span class="h2 font-weight-bold mb-0">3NMD</span>
+                    </div>
+
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">
+                      Monday: / <br>
+                      Tuesday: 08:00 - 10:30 <br>
+                      Wednesday: / <br>
+                      Thursday: 11:00 - 17:00 <br>
+                      Friday: / <br>
+                      Saturday: / <br>
+                      Sunday: / <br>
+                    </span>
+                  </p>
+                    <p class="mt-3 mb-0 text-sm">
+                      <div class="col d-flex justify-content-center">
+                        <a href="#!" class="btn btn-sm btn-secundary">Edit</a>
+                      </div>
+                    </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+{% endblock javascripts %}

@@ -1,0 +1,203 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} History Room {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="/rooms">Rooms</a></li>
+                  <li class="breadcrumb-item"><a href="/room-detail">IoT Lab</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">History IoT Lab</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <ul class="nav nav-pills justify-content-end">
+                      <a href="#" class="btn btn-sm btn-primary py-1 px-3">Filter by x</a>
+                      <a href="#" class="btn btn-sm btn-primary py-1 px-3">Filter by y</a>
+                      <a href="#" class="btn btn-sm btn-primary py-1 px-3">Filter by z</a>
+
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+             <!-- here the groups -->
+              <div class="row">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Access</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Group</th>
+                      <th scope="col">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Approved</td>
+                      <td>14/02/2023</td>
+                      <td>13:33:29</td>
+                      <td>Ona Demuytere</td>
+                      <td>3NMD</td>
+                      <td>Student</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>12/02/2023</td>
+                      <td>10:33:29</td>
+                      <td>Luc Demuytere</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Denied</td>
+                      <td>03/02/2023</td>
+                      <td>16:31:29</td>
+                      <td>Sander Spek</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>14/02/2023</td>
+                      <td>13:33:29</td>
+                      <td>Ona Demuytere</td>
+                      <td>3NMD</td>
+                      <td>Student</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>12/02/2023</td>
+                      <td>10:33:29</td>
+                      <td>Luc Demuytere</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Denied</td>
+                      <td>03/02/2023</td>
+                      <td>16:31:29</td>
+                      <td>Sander Spek</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>14/02/2023</td>
+                      <td>13:33:29</td>
+                      <td>Ona Demuytere</td>
+                      <td>3NMD</td>
+                      <td>Student</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>12/02/2023</td>
+                      <td>10:33:29</td>
+                      <td>Luc Demuytere</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Denied</td>
+                      <td>03/02/2023</td>
+                      <td>16:31:29</td>
+                      <td>Sander Spek</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>14/02/2023</td>
+                      <td>13:33:29</td>
+                      <td>Ona Demuytere</td>
+                      <td>3NMD</td>
+                      <td>Student</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>12/02/2023</td>
+                      <td>10:33:29</td>
+                      <td>Luc Demuytere</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Denied</td>
+                      <td>03/02/2023</td>
+                      <td>16:31:29</td>
+                      <td>Sander Spek</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>14/02/2023</td>
+                      <td>13:33:29</td>
+                      <td>Ona Demuytere</td>
+                      <td>3NMD</td>
+                      <td>Student</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td>12/02/2023</td>
+                      <td>10:33:29</td>
+                      <td>Luc Demuytere</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                    <tr>
+                      <td>Denied</td>
+                      <td>03/02/2023</td>
+                      <td>16:31:29</td>
+                      <td>Sander Spek</td>
+                      <td>Teachers</td>
+                      <td>Teacher</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+{% endblock javascripts %}
