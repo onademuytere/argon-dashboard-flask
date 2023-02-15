@@ -31,12 +31,13 @@ general_parameters = db.collection('general_parameters')
 @blueprint.route('/rooms')
 @login_required
 def index():
+    array = []
+    docs = db.collection(u'room').stream()
+    for doc in docs:
+        array.append(doc.to_dict())
 
-    doc = general_parameters.document("parameters").get()
-    if doc.exists:
-        params = doc.to_dict()
-        acc = params['minimum_accuracy']
-        return render_template('home/rooms.html', segment='rooms', acc=acc)
+    if docs:
+        return render_template('home/rooms.html', segment='rooms', acc=array)
     else:
         return render_template('home/rooms.html', segment='rooms', acc="failed")
 
