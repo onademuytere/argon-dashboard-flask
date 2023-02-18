@@ -7,6 +7,7 @@ from apps.home import blueprint
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import Flask, session, render_template, request, redirect, jsonify
+# from crud import *
 
 from firebase_admin import credentials, firestore, initialize_app
 
@@ -32,14 +33,16 @@ general_parameters = db.collection('general_parameters')
 @login_required
 def index():
     array = []
-    docs = db.collection(u'room').stream()
-    for doc in docs:
-        array.append(doc.to_dict())
+    docs = None
+    #docs = db.collection(u'room').stream()
+
 
     if docs:
+        for doc in docs:
+            array.append(doc.to_dict())
         return render_template('home/rooms.html', segment='rooms', acc=array)
     else:
-        return render_template('home/rooms.html', segment='rooms', acc="failed")
+        return render_template('home/rooms.html', segment='rooms', acc="hey")
 
     #return render_template('home/rooms.html', segment='rooms')
 
