@@ -7,7 +7,7 @@ from apps.home import blueprint
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import Flask, session, render_template, request, redirect, jsonify
-# from crud import *
+#from functions import plustwo
 
 from firebase_admin import credentials, firestore, initialize_app
 
@@ -28,23 +28,27 @@ db = firestore.client()
 general_parameters = db.collection('general_parameters')
 
 
-
-@blueprint.route('/rooms')
-@login_required
-def index():
+"""
+put the below functions in another py file (functions.py) and connect them
+"""
+def get_rooms():
     array = []
     docs = None
-    #docs = db.collection(u'room').stream()
-
-
+    docs = db.collection(u'room').stream()
     if docs:
         for doc in docs:
             array.append(doc.to_dict())
         return render_template('home/rooms.html', segment='rooms', acc=array)
     else:
         return render_template('home/rooms.html', segment='rooms', acc="hey")
+"""
 
-    #return render_template('home/rooms.html', segment='rooms')
+"""
+
+@blueprint.route('/rooms')
+@login_required
+def index():
+    return get_rooms()
 
 
 @blueprint.route('/<template>')

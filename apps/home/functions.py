@@ -1,5 +1,5 @@
-def plustwo(n):
-    out = n + 2
+def plustwo():
+    out = 1 + 2
     return out
 
 
