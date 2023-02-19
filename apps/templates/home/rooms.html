@@ -28,7 +28,9 @@
           <div class="row">
             {% for list in acc %}
               <div class="col-xl-3 col-md-6">
-              <a href="/room-detail">
+              <!--<a href="/room-detail">-->
+               <button id="{{list['roomname']}}" type=button class="btn btn-link" onclick="goToDetail({{list['roomname']}})">{{
+                    entry['title'] }>
                 <div class="card card-stats">
                   <!-- Card body -->
                   <div class="card-body">
@@ -45,7 +47,8 @@
                     </p>
                   </div>
                 </div>
-              </a>
+              <!--</a>-->
+               </button>
             </div>
             {% endfor %}
 

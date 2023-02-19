@@ -31,6 +31,8 @@ general_parameters = db.collection('general_parameters')
 """
 put the below functions in another py file (functions.py) and connect them
 """
+
+
 def get_rooms():
     array = []
     docs = None
@@ -41,8 +43,9 @@ def get_rooms():
         return render_template('home/rooms.html', segment='rooms', acc=array)
     else:
         return render_template('home/rooms.html', segment='rooms', acc="hey")
+    
 """
-
+end 
 """
 
 @blueprint.route('/rooms')
