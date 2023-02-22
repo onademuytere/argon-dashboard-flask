@@ -51,8 +51,21 @@ end
 @blueprint.route('/rooms')
 @login_required
 def index():
-    return get_rooms()
+    array = []
+    docs = None
+    docs = db.collection(u'room').stream()
+    if docs:
+        for doc in docs:
+            array.append(doc.to_dict())
+        return render_template('home/rooms.html', segment='rooms', acc=array)
+    else:
+        return render_template('home/rooms.html', segment='rooms', acc="hey")
 
+@blueprint.route('/recipe/<room_id>', methods=['GET'])
+@login_required
+def room(room_id):
+    response = requests.get("https://api.spoonacular.com/recipes/informationBulk?ids="+room_id+"&includeNutrition=true&apiKey="+API_KEY)
+    return make_response(render_template("room-detail.html", recipe_id=json.loads(response.text)), 200)
 
 @blueprint.route('/<template>')
 @login_required
