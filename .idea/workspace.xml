@@ -34,11 +34,12 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/onademuytere/Documents/GitHub/argon-dashboard-flask/apps/templates/home"
+    "last_opened_file_path": "/Users/onademuytere/Documents/GitHub/argon-dashboard-flask/apps/static"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/static" />
       <recent name="$PROJECT_DIR$/apps/templates/home" />
     </key>
   </component>

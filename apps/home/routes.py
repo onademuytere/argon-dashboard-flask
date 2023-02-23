@@ -61,11 +61,17 @@ def index():
     else:
         return render_template('home/rooms.html', segment='rooms', acc="hey")
 
-@blueprint.route('/recipe/<room_id>', methods=['GET'])
+
+@blueprint.route('/room-detail/<room_id>')
 @login_required
 def room(room_id):
-    response = requests.get("https://api.spoonacular.com/recipes/informationBulk?ids="+room_id+"&includeNutrition=true&apiKey="+API_KEY)
-    return make_response(render_template("room-detail.html", recipe_id=json.loads(response.text)), 200)
+    doc_ref = db.collection(u'room').document(room_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        return render_template('home/room-detail.html', segment='room-detail', room=doc.to_dict())
+    else:
+        return render_template('home/room-detail.html', segment='room-detail', room="none")
+
 
 @blueprint.route('/<template>')
 @login_required
