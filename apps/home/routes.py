@@ -43,14 +43,25 @@ def get_rooms():
         return render_template('home/rooms.html', segment='rooms', acc=rooms)
     else:
         return render_template('home/rooms.html', segment='rooms', acc="hey")
-    
+
+
 """
 end 
 """
 
-@blueprint.route('/rooms')
+
+@blueprint.route('/rooms', methods=['GET', 'POST'])
 @login_required
 def index():
+    if request.method == 'POST':
+
+        data = {
+            u'name': request.form['name'],
+            u'state': request.form['location'],
+            u'country': request.form['name']
+        }
+        db.collection(u'general_parameters').document(u'test').set(data)
+
     rooms = []
     docs = None
     docs = db.collection(u'room').stream()
