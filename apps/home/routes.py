@@ -51,15 +51,17 @@ end
 @blueprint.route('/rooms')
 @login_required
 def index():
-    array = []
+    rooms = []
     docs = None
     docs = db.collection(u'room').stream()
     if docs:
         for doc in docs:
-            array.append(doc.to_dict())
-        return render_template('home/rooms.html', segment='rooms', acc=array)
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            rooms.append(dict)
+        return render_template('home/rooms.html', segment='rooms', rooms=rooms)
     else:
-        return render_template('home/rooms.html', segment='rooms', acc="hey")
+        return render_template('home/rooms.html', segment='rooms', rooms="hey")
 
 
 @blueprint.route('/room-detail/<room_id>')
