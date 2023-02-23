@@ -21,7 +21,9 @@
             </div>
             <div class="col-lg-6 col-5 text-right">
               <a href="/room-add" class="btn btn-sm btn-neutral">Add a room</a>
-
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#exampleModal">
+                Add a room - modal
+              </button>
             </div>
           </div>
           <!-- Card stats -->
@@ -57,6 +59,53 @@
     </div>
 
     <!-- Page content -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add a room</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-building"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Name of room" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Location" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="btn btn-color">
+                    <input class="form-control" placeholder="Image" type="file">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Add room</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal to add room -->
 
 {% endblock content %}
 
