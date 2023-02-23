@@ -34,13 +34,13 @@ put the below functions in another py file (functions.py) and connect them
 
 
 def get_rooms():
-    array = []
+    rooms = []
     docs = None
     docs = db.collection(u'room').stream()
     if docs:
         for doc in docs:
-            array.append(doc.to_dict())
-        return render_template('home/rooms.html', segment='rooms', acc=array)
+            rooms.append(doc.to_dict())
+        return render_template('home/rooms.html', segment='rooms', acc=rooms)
     else:
         return render_template('home/rooms.html', segment='rooms', acc="hey")
     
@@ -70,7 +70,16 @@ def room(room_id):
     doc_ref = db.collection(u'room').document(room_id)
     doc = doc_ref.get()
     if doc.exists:
-        return render_template('home/room-detail.html', segment='room-detail', room=doc.to_dict())
+        dict = doc.to_dict()
+        dict["id"] = room_id
+        schemes = []
+        docs = db.collection(u'scheme').where(u'room_id', u'==', room_id).stream()
+        if docs:
+            for doc in docs:
+                schemes.append(doc.to_dict())
+            return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes)
+        else:
+            return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=[])
     else:
         return render_template('home/room-detail.html', segment='room-detail', room="none")
 
