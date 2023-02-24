@@ -50,6 +50,22 @@ def getRooms():
         return docs
 
 
+def getRoomById(room_id):
+    doc_ref = db.collection(u'room').document(room_id)
+    doc = doc_ref.get()
+    schemes = []
+    if doc.exists:
+        dict = doc.to_dict()
+        dict["id"] = room_id
+        docs = db.collection(u'scheme').where(u'room_id', u'==', room_id).stream()
+        if docs:
+            for doc in docs:
+                schemes.append(doc.to_dict())
+        return schemes, dict
+    else:
+        return schemes, []
+
+
 def addRoom(name, location, ):
     data = {
         u'roomname': name,
@@ -111,24 +127,14 @@ def index():
 @blueprint.route('/room-detail/<room_id>')
 @login_required
 def room(room_id):
-    doc_ref = db.collection(u'room').document(room_id)
-    doc = doc_ref.get()
-    if doc.exists:
-        dict = doc.to_dict()
-        dict["id"] = room_id
-        schemes = []
-        docs = db.collection(u'scheme').where(u'room_id', u'==', room_id).stream()
-        if docs:
-            days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-            for doc in docs:
-                schemes.append(doc.to_dict())
-            return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes, 
-                                   days_of_week=days_of_week)
-        else:
-            return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=[], 
-                                   days_of_week="")
+    days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    if getRoomById(room_id):
+        schemes, dict = getRoomById(room_id)
+        return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes,
+                               days_of_week=days_of_week)
     else:
-        return render_template('home/room-detail.html', segment='room-detail', room="none")
+        return render_template('home/room-detail.html', segment='room-detail', room=None, schemes=None,
+                               days_of_week=days_of_week)
 
 
 @blueprint.route('/<template>')
