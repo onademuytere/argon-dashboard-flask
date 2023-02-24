@@ -7,7 +7,7 @@ from apps.home import blueprint
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import Flask, session, render_template, request, redirect, jsonify
-#from functions import plustwo
+#from firestoreFunctions import getRooms
 
 from firebase_admin import credentials, firestore, initialize_app
 
@@ -32,17 +32,27 @@ general_parameters = db.collection('general_parameters')
 put the below functions in another py file (functions.py) and connect them
 """
 
-
-def get_rooms():
+def getRooms():
     rooms = []
     docs = None
     docs = db.collection(u'room').stream()
     if docs:
         for doc in docs:
-            rooms.append(doc.to_dict())
-        return render_template('home/rooms.html', segment='rooms', acc=rooms)
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            rooms.append(dict)
+        return rooms
     else:
-        return render_template('home/rooms.html', segment='rooms', acc="hey")
+        return docs
+
+
+def addRoom(name, location, image):
+    data = {
+        u'roomname': name,
+        u'location': location,
+        u'image': image
+    }
+    db.collection(u'room').add(data)
 
 
 """
@@ -54,21 +64,10 @@ end
 @login_required
 def index():
     if request.method == 'POST':
-        data = {
-            u'roomname': request.form['name'],
-            u'location': request.form['location'],
-            u'image': request.form['image']
-        }
-        db.collection(u'room').add(data)
+        addRoom(request.form['name'], request.form['location'], request.form['image'])
 
-    rooms = []
-    docs = None
-    docs = db.collection(u'room').stream()
-    if docs:
-        for doc in docs:
-            dict = doc.to_dict()
-            dict["id"] = doc.id
-            rooms.append(dict)
+    if getRooms():
+        rooms = getRooms()
         return render_template('home/rooms.html', segment='rooms', rooms=rooms)
     else:
         return render_template('home/rooms.html', segment='rooms', rooms="hey")
