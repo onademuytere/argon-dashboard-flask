@@ -66,7 +66,28 @@ def getRoomById(room_id):
         return schemes, []
 
 
-def addRoom(name, location, ):
+def addRoom(name, location):
+    data = {
+        u'roomname': name,
+        u'location': location,
+    }
+    db.collection(u'room').add(data)
+
+
+def editRoom(req, room_id):
+    dict = {}
+    if req['name']:
+        name = req['name']
+        dict['roomname'] = name
+    if req['location']:
+        location = req['location']
+        dict['location'] = location
+
+    room_ref = db.collection(u'room').document(room_id)
+    room_ref.update(dict)
+
+
+def addScheme(req, room_id):
     data = {
         u'roomname': name,
         u'location': location,
@@ -114,9 +135,6 @@ def index():
         blob = bucket.blob(file_path)
         blob.upload_from_file(file_path)
 
-
-
-
     if getRooms():
         rooms = getRooms()
         return render_template('home/rooms.html', segment='rooms', rooms=rooms)
@@ -124,9 +142,14 @@ def index():
         return render_template('home/rooms.html', segment='rooms', rooms="hey")
 
 
-@blueprint.route('/room-detail/<room_id>')
+@blueprint.route('/room-detail/<room_id>', methods=['GET', 'POST'])
 @login_required
 def room(room_id):
+    if request.method == 'POST':
+        if request.form['name'] or request.form['location']:
+            editRoom(request.form, room_id)
+        else:
+            addScheme(request.form, room_id)
     days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
     if getRoomById(room_id):
         schemes, dict = getRoomById(room_id)
@@ -142,7 +165,6 @@ def room(room_id):
 def route_template(template):
 
     try:
-
         if not template.endswith('.html'):
             template += '.html'
 
