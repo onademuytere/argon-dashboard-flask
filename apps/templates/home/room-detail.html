@@ -67,6 +67,9 @@
                 <div class="col">
                   <ul class="nav nav-pills justify-content-end">
                       <a href="#" class="btn btn-sm btn-primary py-1 px-3">Add scheme</a>
+                      <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#addScheme">
+                        Add scheme - modal
+                      </button>
                   </ul>
                 </div>
               </div>
@@ -118,6 +121,53 @@
       {% include "includes/footer.html" %}
 
     </div>
+
+    <!-- Add scheme modal-->
+    <div class="modal fade" id="addScheme" tabindex="-1" role="dialog" aria-labelledby="addSchemeLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSchemeLabel">Add a room</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="post">
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-building"></i></span>
+                  </div>
+                  <input name="name" class="form-control" placeholder="Name of room" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                  </div>
+                  <input name="location" class="form-control" placeholder="Location" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="btn btn-color">
+                    <input name="image" class="form-control" placeholder="Image" type="file">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add room</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
 
 {% endblock content %}
 

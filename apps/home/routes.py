@@ -54,7 +54,6 @@ end
 @login_required
 def index():
     if request.method == 'POST':
-
         data = {
             u'roomname': request.form['name'],
             u'location': request.form['location'],
