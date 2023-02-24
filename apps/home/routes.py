@@ -87,6 +87,11 @@ def editRoom(req, room_id):
     room_ref.update(dict)
 
 
+def deleteRoom(room_id):
+    db.collection(u'room').document(room_id).delete()
+    
+
+
 def addScheme(req, room_id):
     data = {
         u'roomname': name,
@@ -159,6 +164,17 @@ def room(room_id):
         return render_template('home/room-detail.html', segment='room-detail', room=None, schemes=None,
                                days_of_week=days_of_week)
 
+
+@blueprint.route('/room-detail/<room_id>/delete', methods=['GET', 'POST'])
+@login_required
+def room_delete(room_id):
+    deleteRoom(room_id)
+    if getRooms():
+        rooms = getRooms()
+        print("deleted")
+        return render_template('home/rooms.html', segment='rooms', rooms=rooms)
+    else:
+        return render_template('home/rooms.html', segment='rooms', rooms=[])
 
 @blueprint.route('/<template>')
 @login_required

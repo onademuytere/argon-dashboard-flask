@@ -22,9 +22,11 @@
             </div>
             <div class="col-lg-6 col-5 text-right">
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#editRoom">
-                Edit room details modal
+                Edit room
               </button>
               <a href="#" class="btn btn-sm btn-danger">Lock door</a>
+              <a href="/room-detail/{{ room['id'] }}/delete" class="btn btn-sm btn-danger">Delete this room</a>
+
             </div>
           </div>
           <!-- Card stats -->
@@ -123,7 +125,7 @@
       {% include "includes/footer.html" %}
 
     </div>
-    <!-- Edit room dettails modal -->
+    <!-- Edit room details modal -->
     <div class="modal fade" id="editRoom" tabindex="-1" role="dialog" aria-labelledby="editRoomLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
