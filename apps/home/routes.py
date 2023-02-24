@@ -56,11 +56,11 @@ def index():
     if request.method == 'POST':
 
         data = {
-            u'name': request.form['name'],
-            u'state': request.form['location'],
-            u'country': request.form['name']
+            u'roomname': request.form['name'],
+            u'location': request.form['location'],
+            u'image': request.form['image']
         }
-        db.collection(u'general_parameters').document(u'test').set(data)
+        db.collection(u'room').add(data)
 
     rooms = []
     docs = None
