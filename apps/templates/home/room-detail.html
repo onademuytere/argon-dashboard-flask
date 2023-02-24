@@ -21,7 +21,9 @@
               </nav>
             </div>
             <div class="col-lg-6 col-5 text-right">
-              <a href="#" class="btn btn-sm btn-neutral">View live camera</a>
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#editRoom">
+                Edit room details modal
+              </button>
               <a href="#" class="btn btn-sm btn-danger">Lock door</a>
             </div>
           </div>
@@ -121,6 +123,54 @@
       {% include "includes/footer.html" %}
 
     </div>
+    <!-- Edit room dettails modal -->
+    <div class="modal fade" id="editRoom" tabindex="-1" role="dialog" aria-labelledby="editRoomLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editRoomLabel">Edit room</h5>
+            <h6></h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="post">
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-building"></i></span>
+                  </div>
+                  <input name="name" class="form-control" placeholder="{{ room['roomname'] }}" type="text">
+
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                  </div>
+                  <input name="location" class="form-control" placeholder="{{ room['location'] }}" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="btn btn-color">
+                    <input name="image" class="form-control" placeholder="Image" type="file">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
 
     <!-- Add scheme modal-->
     <div class="modal fade" id="addScheme" tabindex="-1" role="dialog" aria-labelledby="addSchemeLabel" aria-hidden="true">
