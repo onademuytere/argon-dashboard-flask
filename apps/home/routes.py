@@ -2,14 +2,16 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+import os
+import tempfile
 from apps.home import blueprint
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import Flask, session, render_template, request, redirect, jsonify
+from werkzeug.utils import secure_filename
 #from firestoreFunctions import getRooms
+from firebase_admin import credentials, firestore, initialize_app, storage
 
-from firebase_admin import credentials, firestore, initialize_app
 
 cred = credentials.Certificate({
   "type": "service_account",
@@ -21,10 +23,12 @@ cred = credentials.Certificate({
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-vsza3%40bachelorproef-2223.iam.gserviceaccount.com"
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-vsza3%40bachelorproef-2223.iam.gserviceaccount.com",
 })
-default_app = initialize_app(cred)
+default_app = initialize_app(cred, {
+    'storageBucket': 'bachelorproef-2223.appspot.com'})
 db = firestore.client()
+bucket = storage.bucket()
 general_parameters = db.collection('general_parameters')
 
 
@@ -46,13 +50,17 @@ def getRooms():
         return docs
 
 
-def addRoom(name, location, image):
+def addRoom(name, location, ):
     data = {
         u'roomname': name,
         u'location': location,
-        u'image': image
     }
     db.collection(u'room').add(data)
+
+
+def allowed_file(filename):
+    allowed_ext = {'jpg', 'jpeg', 'png', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_ext
 
 
 """
@@ -64,7 +72,34 @@ end
 @login_required
 def index():
     if request.method == 'POST':
-        addRoom(request.form['name'], request.form['location'], request.form['image'])
+        addRoom(request.form['name'], request.form['location'])
+
+        # check if the post request has the file part
+        """if 'file' not in request.files:
+            print('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(filename)
+            temp = tempfile.NamedTemporaryFile(delete=False)
+            file.save(temp.name)
+            storage().put(temp.name)
+            
+            # Clean-up temp image
+            os.remove(temp.name)
+        """
+        file_path = r"/Users/onademuytere/Documents/GitHub/argon-dashboard-flask/apps/static/assets/img/rooms/iot_lab.jpeg"
+        blob = bucket.blob(file_path)
+        blob.upload_from_file(file_path)
+
+
+
 
     if getRooms():
         rooms = getRooms()
