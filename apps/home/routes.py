@@ -36,6 +36,7 @@ general_parameters = db.collection('general_parameters')
 put the below functions in another py file (functions.py) and connect them
 """
 
+# All room functions
 def getRooms():
     rooms = []
     docs = None
@@ -101,12 +102,28 @@ def deleteRoom(room_id):
     db.collection(u'room').document(room_id).delete()
 
 
+# All scheme functions
 def addScheme(req, room_id):
     data = {
         u'roomname': name,
         u'location': location,
     }
     db.collection(u'room').add(data)
+
+
+# All group functions
+def getGroups():
+    groups = []
+    docs = None
+    docs = db.collection(u'group').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            groups.append(dict)
+        return groups
+    else:
+        return None
 
 
 def allowed_file(filename):
@@ -165,13 +182,15 @@ def room(room_id):
         else:
             addScheme(request.form, room_id)
     days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    if getRoomById(room_id):
+
+    if getRoomById(room_id) and getGroups():
         schemes, dict = getRoomById(room_id)
+        groups = getGroups()
         return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes,
-                               days_of_week=days_of_week)
+                               days_of_week=days_of_week, groups=groups)
     else:
         return render_template('home/room-detail.html', segment='room-detail', room=None, schemes=None,
-                               days_of_week=days_of_week)
+                               days_of_week=days_of_week, groups=None)
 
 
 @blueprint.route('/room-detail/<room_id>/delete', methods=['GET', 'POST'])
