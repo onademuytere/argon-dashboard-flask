@@ -103,14 +103,17 @@ def deleteRoom(room_id):
 
 
 # All scheme functions
-def addScheme(room_id, weekdays):
-    print(room_id, weekdays)
-    """data = {
-        u'roomname': name,
-        u'location': location,
+def addScheme(schedule_week, group_id, room_id):
+    data = {
+        u'assigned_to': group_id,
+        u'room_id': room_id,
+        u'schemename': "Test scheme name"
     }
-    db.collection(u'room').add(data)
-    """
+
+    for key in schedule_week:
+        data[key] = schedule_week[key]
+
+    db.collection(u'scheme').add(data)
 
 
 # All group functions
@@ -178,15 +181,24 @@ def index():
 @blueprint.route('/room-detail/<room_id>', methods=['GET', 'POST'])
 @login_required
 def room(room_id):
-    if request.method == 'POST':
-        #if request.form['name'] is not None or request.form['location'] is not None:
-        #    editRoom(request.form, room_id)
-        #else:
-            select = request.form.get('selectGroup')
-            print(str(select))
-            print(request.form['input11monday'])
-            #addScheme(request.form, room_id)
     days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    if request.method == 'POST':
+        if 'name' in request.form or 'location' in request.form:
+            editRoom(request.form, room_id)
+        else:
+            group_id = request.form.get('selectGroup')
+            schedule_week = {}
+            for day in days_of_week:
+                print(day)
+                list = []
+                if request.form[f'input11{day}'] != '' and request.form[f'input12{day}'] != '':
+                    listElement = request.form[f'input11{day}'] + " - " + request.form[f'input12{day}']
+                    list.append(listElement)
+                if request.form[f'input21{day}'] != '' and request.form[f'input22{day}'] != '':
+                    listElement = request.form[f'input21{day}'] + " - " + request.form[f'input22{day}']
+                    list.append(listElement)
+                schedule_week[day] = list
+            addScheme(schedule_week, group_id, room_id)
 
     if getRoomById(room_id) and getGroups():
         schemes, dict = getRoomById(room_id)
