@@ -231,7 +231,7 @@
                           {{ day }}
                         </label>
                       </div>
-                      <input type="text" id="input{{ day }}" class="input{{ day }}" style="display:none;"/>
+                      <input type="text" id="input{{ day }}" class="input{{ day }}" placeholder="10:00 - 12:00" style="display:none;"/>
                    {% endfor %}
               </div>
 
@@ -253,13 +253,18 @@
 {% block javascripts %}
 
   <script>
-        $(document).on('click','#checkmonday',function() {
-         if($("#checkmonday").is(':checked')){
-          $('#inputmonday').show();
-         }else{
-          $('#inputmonday').hide();
-            }
-   });
+        var array_weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        $.each (array_weekdays, function( indexes, values ) {
+             var check = '#check' + values
+             var input = '#input' + values
+             $(document).on('click', check, function() {
+               if($(check).is(':checked')){
+                $(input).show();
+               }else{
+                $(input).hide();
+                }
+             });
+        });
 
     </script>
 
