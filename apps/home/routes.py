@@ -61,7 +61,9 @@ def getRoomById(room_id):
         docs = db.collection(u'scheme').where(u'room_id', u'==', room_id).stream()
         if docs:
             for doc in docs:
-                schemes.append(doc.to_dict())
+                dict_scheme = doc.to_dict()
+                dict_scheme["id"] = doc.id
+                schemes.append(dict_scheme)
         return schemes, dict
     else:
         return schemes, []
@@ -114,6 +116,11 @@ def addScheme(schedule_week, group_id, room_id):
         data[key] = schedule_week[key]
 
     db.collection(u'scheme').add(data)
+
+
+def deleteScheme(scheme_id):
+    # delete the scheme
+    db.collection(u'scheme').document(scheme_id).delete()
 
 
 # All group functions
@@ -210,7 +217,7 @@ def room(room_id):
                                days_of_week=days_of_week, groups=None)
 
 
-@blueprint.route('/room-detail/<room_id>/delete', methods=['GET', 'POST'])
+@blueprint.route('/room-detail/<room_id>/delete-room', methods=['GET', 'POST'])
 @login_required
 def room_delete(room_id):
     deleteRoom(room_id)
@@ -220,6 +227,20 @@ def room_delete(room_id):
         return render_template('home/rooms.html', segment='rooms', rooms=rooms)
     else:
         return render_template('home/rooms.html', segment='rooms', rooms=[])
+
+
+@blueprint.route('/room-detail/<scheme_id>/delete-scheme', methods=['GET', 'POST'])
+@login_required
+def scheme_delete(scheme_id):
+    deleteScheme(scheme_id)
+
+    if getRooms():
+        rooms = getRooms()
+        print("deleted")
+        return render_template('home/rooms.html', segment='rooms', rooms=rooms)
+    else:
+        return render_template('home/rooms.html', segment='rooms', rooms=[])
+
 
 @blueprint.route('/room-detail/<room_id>/add-scheme', methods=['GET', 'POST'])
 @login_required
