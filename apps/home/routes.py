@@ -103,12 +103,14 @@ def deleteRoom(room_id):
 
 
 # All scheme functions
-def addScheme(req, room_id):
-    data = {
+def addScheme(room_id, weekdays):
+    print(room_id, weekdays)
+    """data = {
         u'roomname': name,
         u'location': location,
     }
     db.collection(u'room').add(data)
+    """
 
 
 # All group functions
@@ -177,10 +179,13 @@ def index():
 @login_required
 def room(room_id):
     if request.method == 'POST':
-        if request.form['name'] or request.form['location']:
-            editRoom(request.form, room_id)
-        else:
-            addScheme(request.form, room_id)
+        #if request.form['name'] is not None or request.form['location'] is not None:
+        #    editRoom(request.form, room_id)
+        #else:
+            select = request.form.get('selectGroup')
+            print(str(select))
+            print(request.form['input11monday'])
+            #addScheme(request.form, room_id)
     days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
     if getRoomById(room_id) and getGroups():
@@ -203,6 +208,26 @@ def room_delete(room_id):
         return render_template('home/rooms.html', segment='rooms', rooms=rooms)
     else:
         return render_template('home/rooms.html', segment='rooms', rooms=[])
+
+@blueprint.route('/room-detail/<room_id>/add-scheme', methods=['GET', 'POST'])
+@login_required
+def add_schedule(room_id):
+    if request.method == 'POST':
+        #weekdays = {}
+        weekday = request.form['input11monday']
+        print("test")
+        print(weekday)
+        # if request.form:
+        #     addSchedule(room_id, weekday)
+
+    if getRooms():
+        rooms = getRooms()
+        print("scheme added")
+        return render_template('home/rooms.html', segment='rooms', rooms=rooms)
+    else:
+        return render_template('home/rooms.html', segment='rooms', rooms=[])
+
+
 
 @blueprint.route('/<template>')
 @login_required
