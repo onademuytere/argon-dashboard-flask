@@ -300,7 +300,6 @@
   <script>
       $(document).on("click", ".open-deleteScheme", function () {
         var mySchemeId = $(this).data('id');
-        //$(".modal-footer #schemeId").href('/room-detail/' + mySchemeId + '/delete-scheme');
         $(".modal-footer #schemeId").attr("href", "/room-detail/" + mySchemeId + "/delete-scheme");
 
         // As pointed out in comments,
