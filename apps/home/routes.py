@@ -123,8 +123,74 @@ def deleteScheme(scheme_id):
     db.collection(u'scheme').document(scheme_id).delete()
 
 
-# All group functions
-def getGroups():
+# All students
+def getStudents():
+    students = []
+    docs = None
+    docs = db.collection(u'user').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            if dict["is_teacher"] is False:
+                dict["id"] = doc.id
+                classname = getGroupById(dict["class_id"])
+                dict["classname"] = classname
+                students.append(dict)
+        return students
+    else:
+        return None
+
+
+# All teachers
+def getTeachers():
+    teachers = []
+    docs = None
+    docs = db.collection(u'user').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            if dict["is_teacher"] is True:
+                dict["id"] = doc.id
+                teachers.append(dict)
+        return teachers
+    else:
+        return None
+
+
+# All classes
+def getClasses():
+    classes = []
+    docs = None
+    docs = db.collection(u'group').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            if dict["is_class"] is True:
+                dict["id"] = doc.id
+                classes.append(dict)
+        return classes
+    else:
+        return None
+
+
+# All nonclasses
+def getNonClasses():
+    nonclasses = []
+    docs = None
+    docs = db.collection(u'group').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            if dict["is_class"] is False:
+                dict["id"] = doc.id
+                nonclasses.append(dict)
+        return nonclasses
+    else:
+        return None
+
+
+# All groups
+def getAllGroups():
     groups = []
     docs = None
     docs = db.collection(u'group').stream()
@@ -134,6 +200,16 @@ def getGroups():
             dict["id"] = doc.id
             groups.append(dict)
         return groups
+    else:
+        return None
+
+
+def getGroupById(group_id):
+    doc_ref = db.collection(u'group').document(group_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        groupname = doc.to_dict()["groupname"]
+        return groupname
     else:
         return None
 
@@ -207,9 +283,9 @@ def room(room_id):
                 schedule_week[day] = list
             addScheme(schedule_week, group_id, room_id)
 
-    if getRoomById(room_id) and getGroups():
+    if getRoomById(room_id) and getAllGroups():
         schemes, dict = getRoomById(room_id)
-        groups = getGroups()
+        groups = getAllGroups()
         return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes,
                                days_of_week=days_of_week, groups=groups)
     else:
@@ -242,24 +318,28 @@ def scheme_delete(scheme_id):
         return render_template('home/rooms.html', segment='rooms', rooms=[])
 
 
-@blueprint.route('/room-detail/<room_id>/add-scheme', methods=['GET', 'POST'])
+@blueprint.route('/users', methods=['GET', 'POST'])
 @login_required
-def add_schedule(room_id):
-    if request.method == 'POST':
-        #weekdays = {}
-        weekday = request.form['input11monday']
-        print("test")
-        print(weekday)
-        # if request.form:
-        #     addSchedule(room_id, weekday)
+def users():
+    #if getStudents() and getTeachers() and getClasses() and getNonClasses():
+    students = getStudents()
+    print("students", students)
 
-    if getRooms():
-        rooms = getRooms()
-        print("scheme added")
-        return render_template('home/rooms.html', segment='rooms', rooms=rooms)
-    else:
-        return render_template('home/rooms.html', segment='rooms', rooms=[])
+    teachers = getTeachers()
+    print("teachers", teachers)
 
+    classes = getClasses()
+    print("classes", classes)
+
+    nonclasses = getNonClasses()
+    print("nonclasses", nonclasses)
+
+
+    """else:
+        return render_template('home/users.html', segment='users', students=[], teachers=[], classes=[], nonclasses=[])
+    """
+    return render_template('home/users.html', segment='users', students=students, teachers=teachers, classes=classes,
+                           nonclasses=nonclasses)
 
 
 @blueprint.route('/<template>')
