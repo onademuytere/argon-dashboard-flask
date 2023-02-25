@@ -88,8 +88,17 @@ def editRoom(req, room_id):
 
 
 def deleteRoom(room_id):
+    # first delete the schemes associated with this room
+    doc_ref = db.collection(u'scheme').where(u'room_id', u'==', room_id).get()
+
+    if doc_ref:
+        batch = db.batch()
+        for doc in doc_ref:
+            batch.delete(doc.reference)
+        batch.commit()
+
+    # delete the room itself
     db.collection(u'room').document(room_id).delete()
-    
 
 
 def addScheme(req, room_id):
