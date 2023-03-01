@@ -104,6 +104,17 @@ def deleteRoom(room_id):
     db.collection(u'room').document(room_id).delete()
 
 
+# All users functions
+def getUserById(user_id):
+    doc_ref = db.collection(u'user').document(user_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        user = doc.to_dict()
+        return user
+    else:
+        return None
+
+
 # All scheme functions
 def addScheme(schedule_week, group_id, room_id):
     data = {
@@ -222,10 +233,19 @@ def getLogs():
         for doc in docs:
             dict = doc.to_dict()
             dict["id"] = doc.id
-            print(doc.to_dict()['datetime'].date())
-
             dict["date"] = doc.to_dict()['datetime'].date()
             dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
+            user = getUserById(dict['user_id'])
+            if user is None:
+                dict["name"] = dict['user_id']
+            else:
+                dict["name"] = user['lastname'] + " " + user['firstname']
+            scheme, room_info = getRoomById(dict['room_id'])
+            if room_info is None:
+                dict["room"] = "Unknown"
+            else:
+                dict["room"] = room_info['roomname']
+
             logs.append(dict)
         return logs
     else:
