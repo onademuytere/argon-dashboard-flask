@@ -214,6 +214,24 @@ def getGroupById(group_id):
         return None
 
 
+def getLogs():
+    logs = []
+    docs = None
+    docs = db.collection(u'logging').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            print(doc.to_dict()['datetime'].date())
+
+            dict["date"] = doc.to_dict()['datetime'].date()
+            dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
+            logs.append(dict)
+        return logs
+    else:
+        return None
+
+
 def allowed_file(filename):
     allowed_ext = {'jpg', 'jpeg', 'png', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_ext
@@ -340,6 +358,17 @@ def users():
     """
     return render_template('home/users.html', segment='users', students=students, teachers=teachers, classes=classes,
                            nonclasses=nonclasses)
+
+
+@blueprint.route('/logging')
+@login_required
+def logging():
+    if getLogs():
+        logs = getLogs()
+        print("logging")
+        return render_template('home/logging.html', segment='logging', logs=logs)
+    else:
+        return render_template('home/logging.html', segment='logging', logs=None)
 
 
 @blueprint.route('/<template>')
