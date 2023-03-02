@@ -30,11 +30,35 @@
             </div>
             -->
             <div class="col-lg-6 col-5 text-right">
-              <a href="/users" class="btn btn-sm btn-neutral">All</a>
-              <a href="/users/Teachers" class="btn btn-sm btn-neutral">Teachers</a>
-              <a href="/users/Students" class="btn btn-sm btn-neutral">Students</a>
-              <a href="/users/Classes" class="btn btn-sm btn-neutral">Classes</a>
-              <a href="/users/Groups" class="btn btn-sm btn-neutral">Groups</a>
+              {% if type == "All" %}
+                <a href="/users" class="btn btn-sm btn-danger">All</a>
+              {% else %}
+                <a href="/users" class="btn btn-sm btn-neutral">All</a>
+              {% endif %}
+
+              {% if type == "Teachers" %}
+                <a href="/users/Teachers" class="btn btn-sm btn-danger">Teachers</a>
+              {% else %}
+                <a href="/users/Teachers" class="btn btn-sm btn-neutral">Teachers</a>
+              {% endif %}
+
+              {% if type == "Students" %}
+                <a href="/users/Students" class="btn btn-sm btn-danger">Students</a>
+              {% else %}
+                <a href="/users/Students" class="btn btn-sm btn-neutral">Students</a>
+              {% endif %}
+
+              {% if type == "Classes" %}
+                <a href="/users/Classes" class="btn btn-sm btn-danger">Classes</a>
+              {% else %}
+                <a href="/users/Classes" class="btn btn-sm btn-neutral">Classes</a>
+              {% endif %}
+
+              {% if type == "Groups" %}
+                <a href="/users/Groups" class="btn btn-sm btn-danger">Groups</a>
+              {% else %}
+                <a href="/users/Groups" class="btn btn-sm btn-neutral">Groups</a>
+              {% endif %}
             </div>
           </div>
           <!-- Card stats -->
