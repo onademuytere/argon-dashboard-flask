@@ -9,7 +9,7 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 from flask import Flask, session, render_template, request, redirect, jsonify
 from werkzeug.utils import secure_filename
-#from firestoreFunctions import getRooms
+#from firestoreFunctions import plustwo
 from firebase_admin import credentials, firestore, initialize_app, storage
 
 
@@ -132,6 +132,25 @@ def addScheme(schedule_week, group_id, room_id):
 def deleteScheme(scheme_id):
     # delete the scheme
     db.collection(u'scheme').document(scheme_id).delete()
+
+
+# All user functions
+def getUsers():
+    users = []
+    docs = None
+    docs = db.collection(u'user').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            classname = ""
+            if dict["is_teacher"] is False:
+                classname = getGroupById(dict["class_id"])
+            dict["classname"] = classname
+            users.append(dict)
+        return users
+    else:
+        return None
 
 
 # All students
@@ -360,24 +379,28 @@ def scheme_delete(scheme_id):
 @login_required
 def users():
     #if getStudents() and getTeachers() and getClasses() and getNonClasses():
-    students = getStudents()
-    print("students", students)
-
-    teachers = getTeachers()
-    print("teachers", teachers)
-
-    classes = getClasses()
-    print("classes", classes)
-
-    nonclasses = getNonClasses()
-    print("nonclasses", nonclasses)
-
+    data = getUsers()
 
     """else:
         return render_template('home/users.html', segment='users', students=[], teachers=[], classes=[], nonclasses=[])
     """
-    return render_template('home/users.html', segment='users', students=students, teachers=teachers, classes=classes,
-                           nonclasses=nonclasses)
+    return render_template('home/users.html', segment='users', type="All", data=data)
+
+@blueprint.route('/users/<type>', methods=['GET', 'POST'])
+@login_required
+def user_types(type):
+    if type == "Students":
+        data = getStudents()
+    elif type == "Teachers":
+        data = getTeachers()
+    elif type == "Classes":
+        data = getClasses()
+    elif type == "Groups":
+        data = getNonClasses()
+    if data:
+        return render_template('home/users.html', segment='users', type=type, data=data)
+    else:
+        return render_template('home/users.html', segment='users', type=None, data=None)
 
 
 @blueprint.route('/logging')
