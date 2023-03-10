@@ -84,6 +84,7 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
+                    <th></th>
                     <th scope="col" class="sort" data-sort="name">Campus ID</th>
                     <th scope="col" class="sort" data-sort="budget">Lastname</th>
                     <th scope="col" class="sort" data-sort="status">Firstname</th>
@@ -94,7 +95,8 @@
                 <tbody>
                 {% for user in data %}
                   <tr>
-                    <td>{{ user['id'] }}</td>
+                      <td></td>
+                      <td>{{ user['id'] }}</td>
                       <td>{{ user['lastname'] }}</td>
                       <td>{{ user['firstname'] }}</td>
                       <td>{{ user['classname'] }}</td>

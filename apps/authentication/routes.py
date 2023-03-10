@@ -3,12 +3,14 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, session
 from flask_login import (
     current_user,
     login_user,
     logout_user
 )
+import pyrebase
+
 
 from apps import db, login_manager
 from apps.authentication import blueprint
@@ -18,6 +20,20 @@ from apps.authentication.models import Users
 from apps.authentication.util import verify_pass
 
 
+# configuration for authentication via firestore
+config = {
+    'apiKey': "AIzaSyAabCtGPoRAYwf6tjvyADtS1Uf5-yLEZBE",
+    'authDomain': "bachelorproef-2223.firebaseapp.com",
+    'projectId': "bachelorproef-2223",
+    'storageBucket': "bachelorproef-2223.appspot.com",
+    'messagingSenderId': "403465742398",
+    'appId': "1:403465742398:web:6f297d5cc51eda2057896f",
+    'measurementId': "G-MVSL2BYPJK",
+    'databaseURL': ''
+}
+
+pb = pyrebase.initialize_app(config)
+auth = pb.auth()
 @blueprint.route('/')
 def route_default():
     return redirect(url_for('authentication_blueprint.login'))
@@ -34,19 +50,24 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Locate user
-        user = Users.query.filter_by(username=username).first()
-
-        # Check the password
-        if user and verify_pass(password, user.password):
-
+        try:
+            print(username)
+            # user = auth.sign_in_with_email_and_password(username, password)
+            # session['user'] = user
+            user = Users.query.filter_by(username=username).first()
+            print(user)
+            # if user and verify_pass(password, user.password):
+            #    print(user)
+            # login_user(user['localId'])
             login_user(user)
+
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok
-        return render_template('accounts/login.html',
-                               msg='Wrong user or password',
-                               form=login_form)
+        except:
+            return render_template('accounts/login.html',
+                                    msg='Wrong user or password',
+                                    form=login_form)
 
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',

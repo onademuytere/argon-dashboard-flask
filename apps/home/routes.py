@@ -13,6 +13,7 @@ from werkzeug.utils import secure_filename
 from firebase_admin import credentials, firestore, initialize_app, storage
 
 
+# configuration for realtime database
 cred = credentials.Certificate({
   "type": "service_account",
   "project_id": "bachelorproef-2223",
