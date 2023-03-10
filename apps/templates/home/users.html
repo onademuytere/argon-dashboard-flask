@@ -95,7 +95,11 @@
                 <tbody>
                 {% for user in data %}
                   <tr>
-                      <td></td>
+                      <td>
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                      </td>
                       <td>{{ user['id'] }}</td>
                       <td>{{ user['lastname'] }}</td>
                       <td>{{ user['firstname'] }}</td>
