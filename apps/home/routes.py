@@ -189,7 +189,7 @@ def getTeachers():
 
 
 # All classes
-def getClasses():
+def getDefaultGroups():
     classes = []
     docs = None
     docs = db.collection(u'group').stream()
@@ -198,18 +198,25 @@ def getClasses():
             dict = doc.to_dict()
             if dict["is_class"] is True:
                 dict["id"] = doc.id
-                number = db.collection(u'user').where(u'class_id', u'==', doc.id).stream()
-                if number:
-                    amount = len(list(number))
-                    dict["number"] = amount
-                classes.append(dict)
+                if doc.id == "cUJpi7aQjwQ60VHw1sZE":
+                    teachers = db.collection(u'user').where(u'is_teacher', u'==', True).stream()
+                    if teachers:
+                        amount = len(list(teachers))
+                        dict["number"] = amount
+                    classes.append(dict)
+                else:
+                    number = db.collection(u'user').where(u'class_id', u'==', doc.id).stream()
+                    if number:
+                        amount = len(list(number))
+                        dict["number"] = amount
+                    classes.append(dict)
         return classes
     else:
         return None
 
 
 # All nonclasses
-def getNonClasses():
+def getNonDefaultGroups():
     nonclasses = []
     docs = None
     docs = db.collection(u'group').stream()
@@ -217,7 +224,26 @@ def getNonClasses():
         for doc in docs:
             dict = doc.to_dict()
             if dict["is_class"] is False:
+                # number = db.collection(u'user').where(u'group_id', u'==', doc.id).stream()
+                users = db.collection(u'user').stream()
+                amount = 0
+                if users:
+                    for user in users:
+                        info = user.to_dict()
+                        if info["group_id"]:
+                            for group in info["group_id"]:
+                                if group == doc.id:
+                                    amount += 1
+                        #for usergroup in info['group_id']:
+                        #    print(usergroup)
+
+                """
+                if number:
+                    amount = len(list(number))
+                    dict["number"] = amount
+                """
                 dict["id"] = doc.id
+                dict["number"] = amount
                 nonclasses.append(dict)
         return nonclasses
     else:
@@ -398,10 +424,10 @@ def user_types(type):
         data = getStudents()
     elif type == "Teachers":
         data = getTeachers()
-    elif type == "Classes":
-        data = getClasses()
+    elif type == "Default_groups":
+        data = getDefaultGroups()
     elif type == "Groups":
-        data = getNonClasses()
+        data = getNonDefaultGroups()
     if data:
         return render_template('home/users.html', segment='users', type=type, data=data)
     else:

@@ -52,10 +52,10 @@
                 <a href="/users/Students" class="btn btn-sm btn-neutral">Students</a>
               {% endif %}
 
-              {% if type == "Classes" %}
-                <a href="/users/Classes" class="btn btn-sm btn-danger">Classes</a>
+              {% if type == "Default_groups" %}
+                <a href="/users/Default_groups" class="btn btn-sm btn-danger">Default groups</a>
               {% else %}
-                <a href="/users/Classes" class="btn btn-sm btn-neutral">Classes</a>
+                <a href="/users/Default_groups" class="btn btn-sm btn-neutral">Default groups</a>
               {% endif %}
 
               {% if type == "Groups" %}
@@ -78,7 +78,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">Users</h3>
+                  <h3 class="mb-0">{{ type }}</h3>
                 </div>
                 <div class="col text-right">
                   <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -90,7 +90,6 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th></th>
                     <th scope="col" class="sort" data-sort="name">Campus ID</th>
                     <th scope="col" class="sort" data-sort="budget">Lastname</th>
                     <th scope="col" class="sort" data-sort="status">Firstname</th>
@@ -101,9 +100,6 @@
                 <tbody>
                 {% for user in data %}
                   <tr>
-                      <td>
-                        <input class="form-check-input" type="checkbox" value="" id="{{ user['id'] }}">
-                      </td>
                       <td>{{ user['id'] }}</td>
                       <td>{{ user['lastname'] }}</td>
                       <td>{{ user['firstname'] }}</td>
@@ -143,38 +139,23 @@
                   <h3 class="mb-0">Users</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="#!" class="btn btn-sm btn-primary">See all</>
+                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
                 </div>
               </div>
             </div>
             <div class="table-responsive">
-                    {{ data }}
-
               <!-- groups table -->
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
-                  {% if type == "Classes" %}
                   <tr>
-                    <th scope="col"></th>
-                    <th scope="col" class="sort" data-sort="name">Classname</th>
-                    <th scope="col" class="sort" data-sort="budget">Number of students</th>
-                    <th scope="col"></th>
-                  </tr>
-                  {% else %}
-                  <tr>
-                    <th scope="col"></th>
                     <th scope="col" class="sort" data-sort="name">Groupname</th>
                     <th scope="col" class="sort" data-sort="budget">Number of members</th>
                     <th scope="col"></th>
                   </tr>
-                  {% endif %}
                 </thead>
                 <tbody>
                 {% for group in data %}
                   <tr>
-                      <td>
-                        <input class="form-check-input" type="checkbox" value="" id="{{ group['id'] }}">
-                      </td>
                       <td>{{ group['groupname'] }}</td>
                       <td>{{ group['number'] }}</td>
                        <td class="text-right">
