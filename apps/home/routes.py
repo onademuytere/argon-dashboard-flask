@@ -161,7 +161,8 @@ def getUsers():
             dict["id"] = doc.id
             classname = ""
             if dict["is_teacher"] is False:
-                classname = getGroupById(dict["class_id"])
+                # classname = getGroupById(dict["class_id"])
+                classname = getClassById(dict["class_id"])
             dict["classname"] = classname
             users.append(dict)
         return users
@@ -179,7 +180,7 @@ def getStudents():
             dict = doc.to_dict()
             if dict["is_teacher"] is False:
                 dict["id"] = doc.id
-                classname = getGroupById(dict["class_id"])
+                classname = getClassById(dict["class_id"])
                 dict["classname"] = classname
                 students.append(dict)
         return students
@@ -276,11 +277,28 @@ def getAllGroups():
 def getGroupById(group_id):
     doc_ref = db.collection(u'group').document(group_id)
     doc = doc_ref.get()
+    schemes = []
     if doc.exists:
-        groupname = doc.to_dict()["groupname"]
-        return groupname
+        dict = doc.to_dict()
+        dict["id"] = group_id
+        docs = db.collection(u'scheme').where(u'group_id', u'==', group_id).stream()
+        if docs:
+            for doc in docs:
+                dict_scheme = doc.to_dict()
+                dict_scheme["id"] = doc.id
+                schemes.append(dict_scheme)
+        return schemes, dict
     else:
-        return None
+        return schemes, []
+
+def getClassById(class_id):
+    doc_ref = db.collection(u'group').document(class_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        dict = doc.to_dict()
+        groupname = dict["groupname"]
+        return groupname
+
 
 
 def getLogs():
@@ -446,10 +464,11 @@ def user_types(type):
 @login_required
 def group(group_id):
     if getGroupById(group_id) and getAllGroups():
-        groupname = getGroupById(group_id)
+        #groupname = getGroupById(group_id)
+        schemes, dict = getGroupById(group_id)
         groupmembers = getUsersByGroup(group_id)
         #groups = getAllGroups()
-        return render_template('home/group-detail.html', segment='group-detail', groupname=groupname,
+        return render_template('home/group-detail.html', segment='group-detail', schemes=schemes, group=dict,
                                groupmembers=groupmembers)
     else:
         return render_template('home/group-detail.html', segment='group-detail', groupname=None)

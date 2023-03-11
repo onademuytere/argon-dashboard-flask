@@ -16,7 +16,7 @@
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="/users">Groups</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">{{ groupname }}</li>
+                  <li class="breadcrumb-item active" aria-current="page">{{ group["groupname"] }}</li>
                 </ol>
               </nav>
             </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="card-body">
              <!-- here the groups -->
-              <!--<div class="row">
+              <div class="row">
                 {% for scheme in schemes %}
                   <div class="col-xl-3 col-md-6">
               <div class="card card-stats">
@@ -92,7 +92,7 @@
             </div>
                 {% endfor %}
 
-          </div>-->
+          </div>
             </div>
           </div>
         </div>
