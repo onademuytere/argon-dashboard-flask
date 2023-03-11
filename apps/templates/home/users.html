@@ -32,7 +32,6 @@
             -->
 
             <div class="col-lg-6 col-5 text-right">
-              <button type="submit" class="btn btn-primary">Add to a group</button>
 
               {% if type == "All" %}
                 <a href="/users" class="btn btn-sm btn-danger">All</a>
@@ -151,13 +150,18 @@
                     <th scope="col" class="sort" data-sort="name">Groupname</th>
                     <th scope="col" class="sort" data-sort="budget">Number of members</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
                 {% for group in data %}
-                  <tr>
+                    <tr>
+
                       <td>{{ group['groupname'] }}</td>
                       <td>{{ group['number'] }}</td>
+                      <td><form action="/group-detail/{{group['id']}}">
+                        <button type="submit">See details</button>
+                      </form></td>
                        <td class="text-right">
                         <div class="dropdown">
                           <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -170,6 +174,7 @@
                           </div>
                         </div>
                       </td>
+
                     </tr>
                 {% endfor %}
                 </tbody>
