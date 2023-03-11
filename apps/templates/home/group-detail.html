@@ -97,12 +97,32 @@
           </div>
         </div>
         <div class="col-xl-4">
-          <div class="card bg-primary">
+          <div class="card">
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-white mb-0">Members</h5>
+                  <h5 class="card-title text-uppercase mb-0">Members</h5>
                 </div>
+                <div class="table-responsive">
+              <!-- groups table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" class="sort" data-sort="name">Firstname</th>
+                    <th scope="col" class="sort" data-sort="budget">Lastname</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for member in groupmembers %}
+                    <tr>
+                      <td>{{ member["firstname"] }}</td>
+                      <td>{{ member["lastname"] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
 
 
               </div>

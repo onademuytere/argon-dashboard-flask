@@ -115,6 +115,21 @@ def getUserById(user_id):
     else:
         return None
 
+def getUsersByGroup(group_id):
+    users = []
+    doc = db.collection(u'user').stream()
+    if doc:
+        for user in doc:
+            dict = user.to_dict()
+            for group in dict["group_id"]:
+                if group == group_id:
+                    dict["id"] = user.id
+                    users.append(dict)
+        return users
+    else:
+        return None
+
+
 
 # All scheme functions
 def addScheme(schedule_week, group_id, room_id):
@@ -432,8 +447,10 @@ def user_types(type):
 def group(group_id):
     if getGroupById(group_id) and getAllGroups():
         groupname = getGroupById(group_id)
+        groupmembers = getUsersByGroup(group_id)
         #groups = getAllGroups()
-        return render_template('home/group-detail.html', segment='group-detail', groupname=groupname)
+        return render_template('home/group-detail.html', segment='group-detail', groupname=groupname,
+                               groupmembers=groupmembers)
     else:
         return render_template('home/group-detail.html', segment='group-detail', groupname=None)
 
