@@ -234,14 +234,7 @@ def getNonDefaultGroups():
                             for group in info["group_id"]:
                                 if group == doc.id:
                                     amount += 1
-                        #for usergroup in info['group_id']:
-                        #    print(usergroup)
 
-                """
-                if number:
-                    amount = len(list(number))
-                    dict["number"] = amount
-                """
                 dict["id"] = doc.id
                 dict["number"] = amount
                 nonclasses.append(dict)
@@ -433,6 +426,16 @@ def user_types(type):
     else:
         return render_template('home/users.html', segment='users', type=None, data=None)
 
+
+@blueprint.route('/group-detail/<group_id>', methods=['GET', 'POST'])
+@login_required
+def group(group_id):
+    if getGroupById(group_id) and getAllGroups():
+        groupname = getGroupById(group_id)
+        #groups = getAllGroups()
+        return render_template('home/group-detail.html', segment='group-detail', groupname=groupname)
+    else:
+        return render_template('home/group-detail.html', segment='group-detail', groupname=None)
 
 @blueprint.route('/logging')
 @login_required
