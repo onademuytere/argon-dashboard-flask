@@ -198,6 +198,10 @@ def getClasses():
             dict = doc.to_dict()
             if dict["is_class"] is True:
                 dict["id"] = doc.id
+                number = db.collection(u'user').where(u'class_id', u'==', doc.id).stream()
+                if number:
+                    amount = len(list(number))
+                    dict["number"] = amount
                 classes.append(dict)
         return classes
     else:
