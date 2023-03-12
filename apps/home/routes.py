@@ -336,6 +336,19 @@ def getParameters():
         params = parameters.to_dict()
         return params["minimum_accuracy"], params["unlock_seconds"]
 
+def editParameters(req):
+    dict_params = {}
+    if req['accuracy']:
+        accuracy = req['accuracy']
+        dict_params['minimum_accuracy'] = int(accuracy)
+        dict_params['retrain_model'] = True
+    if req['seconds']:
+        seconds = req['seconds']
+        dict_params['unlock_seconds'] = int(seconds)
+
+    params_ref = db.collection(u'general_parameters').document(u'parameters')
+    params_ref.update(dict_params)
+
 
 def allowed_file(filename):
     allowed_ext = {'jpg', 'jpeg', 'png', 'gif'}
@@ -493,10 +506,9 @@ def logging():
 @login_required
 def settings():
     if request.method == 'POST':
-        return render_template('home/settings.html', segment='settings')
-    else:
-        acc, sec = getParameters()
-        return render_template('home/settings.html', segment='settings', acc=acc, sec=sec)
+        editParameters(request.form)
+    acc, sec = getParameters()
+    return render_template('home/settings.html', segment='settings', acc=acc, sec=sec)
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
