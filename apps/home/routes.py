@@ -484,11 +484,26 @@ def user_types(type):
 @blueprint.route('/group-detail/<group_id>', methods=['GET', 'POST'])
 @login_required
 def group(group_id):
-    #if getGroupById(group_id) and getAllGroups():
+    if request.method == 'POST':
+        room_id = request.form.get('selectGroup')
+        schedule_week = {}
+        for day in days_of_week:
+            print(day)
+            list = []
+            if request.form[f'input11{day}'] != '' and request.form[f'input12{day}'] != '':
+                listElement = request.form[f'input11{day}'] + " - " + request.form[f'input12{day}']
+                list.append(listElement)
+            if request.form[f'input21{day}'] != '' and request.form[f'input22{day}'] != '':
+                listElement = request.form[f'input21{day}'] + " - " + request.form[f'input22{day}']
+                list.append(listElement)
+            schedule_week[day] = list
+        addScheme(schedule_week, group_id, room_id)
     schemes, dict = getGroupById(group_id)
     groupmembers = getUsersByGroup(group_id)
+    rooms = getRooms()
     return render_template('home/group-detail.html', segment='group-detail', schemes=schemes, group=dict,
-                           groupmembers=groupmembers, days_of_week=days_of_week)
+                           groupmembers=groupmembers, days_of_week=days_of_week, rooms=rooms)
+
     #else:
     #    return render_template('home/group-detail.html', segment='group-detail', groupname=None)
 
@@ -509,10 +524,11 @@ def settings():
         editParameters(request.form)
     acc, sec = getParameters()
     return render_template('home/settings.html', segment='settings', acc=acc, sec=sec)
+
+
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
-
     try:
         if not template.endswith('.html'):
             template += '.html'
