@@ -464,21 +464,41 @@ def users():
     """
     return render_template('home/users.html', segment='users', type="All", data=data)
 
+
 @blueprint.route('/users/<type>', methods=['GET', 'POST'])
 @login_required
 def user_types(type):
+    data = None
     if type == "Students":
         data = getStudents()
     elif type == "Teachers":
         data = getTeachers()
-    elif type == "Default_groups":
-        data = getDefaultGroups()
-    elif type == "Groups":
-        data = getNonDefaultGroups()
-    if data:
+    if data is not None:
         return render_template('home/users.html', segment='users', type=type, data=data)
     else:
         return render_template('home/users.html', segment='users', type=None, data=None)
+
+
+@blueprint.route('/groups', methods=['GET', 'POST'])
+@login_required
+def groups():
+    data = getDefaultGroups()
+    if data:
+        return render_template('home/groups.html', segment='groups', type=type, data=data)
+    else:
+        return render_template('home/groups.html', segment='groups', type=None, data=None)
+
+
+@blueprint.route('/groups/<type>', methods=['GET', 'POST'])
+@login_required
+def group_types(type):
+    data = None
+    if type == "Groups":
+        data = getNonDefaultGroups()
+    if data is not None:
+        return render_template('home/groups.html', segment='groups', type=type, data=data)
+    else:
+        return render_template('home/groups.html', segment='groups', type=None, data=None)
 
 
 @blueprint.route('/group-detail/<group_id>', methods=['GET', 'POST'])
@@ -506,6 +526,7 @@ def group(group_id):
 
     #else:
     #    return render_template('home/group-detail.html', segment='group-detail', groupname=None)
+
 
 @blueprint.route('/logging')
 @login_required

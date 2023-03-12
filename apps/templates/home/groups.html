@@ -16,8 +16,8 @@
             <div class="col-lg-6 col-7">
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                   <li class="breadcrumb-item"><a href="/users">Users</a></li>
-                   <li class="breadcrumb-item active" aria-current="page">{{ type }}</li>
+                   <li class="breadcrumb-item"><a href="/groups">Groups</a></li>
+                   <li class="breadcrumb-item active" aria-current="page">Default groups</li>
 
                 </ol>
               </nav>
@@ -33,24 +33,17 @@
 
             <div class="col-lg-6 col-5 text-right">
 
-              {% if type == "All" %}
-                <a href="/users" class="btn btn-sm btn-danger">All</a>
+              {% if type != "Groups" %}
+                <a href="/users/Default_groups" class="btn btn-sm btn-danger">Default groups</a>
               {% else %}
-                <a href="/users" class="btn btn-sm btn-neutral">All</a>
+                <a href="/users/Default_groups" class="btn btn-sm btn-neutral">Default groups</a>
               {% endif %}
 
-              {% if type == "Teachers" %}
-                <a href="/users/Teachers" class="btn btn-sm btn-danger">Teachers</a>
+              {% if type == "Groups" %}
+                <a href="/users/Groups" class="btn btn-sm btn-danger">Groups</a>
               {% else %}
-                <a href="/users/Teachers" class="btn btn-sm btn-neutral">Teachers</a>
+                <a href="/users/Groups" class="btn btn-sm btn-neutral">Groups</a>
               {% endif %}
-
-              {% if type == "Students" %}
-                <a href="/users/Students" class="btn btn-sm btn-danger">Students</a>
-              {% else %}
-                <a href="/users/Students" class="btn btn-sm btn-neutral">Students</a>
-              {% endif %}
-
             </div>
           </div>
           <!-- Card stats -->
@@ -58,7 +51,6 @@
       </div>
     </div>
 
-      {% if type in ("All", "Teachers", "Students") %}
       <div class="container-fluid mt--6">
       <div class="row">
         <div class="col-xl-12">
@@ -66,69 +58,7 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">{{ type }}</h3>
-                </div>
-                <div class="col text-right">
-                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col" class="sort" data-sort="name">Campus ID</th>
-                    <th scope="col" class="sort" data-sort="budget">Lastname</th>
-                    <th scope="col" class="sort" data-sort="status">Firstname</th>
-                    {% if type in ("All", "Students") %}
-                      <th scope="col" class="sort" data-sort="status">Class</th>
-                    {% endif %}
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for user in data %}
-                  <tr>
-                      <td>{{ user['id'] }}</td>
-                      <td>{{ user['lastname'] }}</td>
-                      <td>{{ user['firstname'] }}</td>
-                      {% if type in ("All", "Students") %}
-                        <td>{{ user['classname'] }}</td>
-                      {% endif %}
-                       <td class="text-right">
-                        <div class="dropdown">
-                          <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {% include "includes/footer.html" %}
-
-    </div>
-      {% else %}
-      <div class="container-fluid mt--6">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="card">
-            <div class="card-header border-0">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h3 class="mb-0">Users</h3>
+                  <h3 class="mb-0">Groups</h3>
                 </div>
                 <div class="col text-right">
                   <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -184,7 +114,6 @@
       {% include "includes/footer.html" %}
 
     </div>
-      {% endif %}
     <!-- Page content for students -->
       <div id="students" class="container-fluid mt--6 collapse">
     <div class="row">
