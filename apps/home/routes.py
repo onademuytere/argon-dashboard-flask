@@ -330,6 +330,13 @@ def getLogs():
         return None
 
 
+def getParameters():
+    parameters = db.collection(u'general_parameters').document(u'parameters').get()
+    if parameters.exists:
+        params = parameters.to_dict()
+        return params["minimum_accuracy"], params["unlock_seconds"]
+
+
 def allowed_file(filename):
     allowed_ext = {'jpg', 'jpeg', 'png', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_ext
@@ -482,7 +489,14 @@ def logging():
     else:
         return render_template('home/logging.html', segment='logging', logs=None)
 
-
+@blueprint.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        return render_template('home/settings.html', segment='settings')
+    else:
+        acc, sec = getParameters()
+        return render_template('home/settings.html', segment='settings', acc=acc, sec=sec)
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
