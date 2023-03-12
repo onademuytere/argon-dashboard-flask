@@ -31,7 +31,7 @@ default_app = initialize_app(cred, {
 db = firestore.client()
 bucket = storage.bucket()
 general_parameters = db.collection('general_parameters')
-
+days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 """
 put the below functions in another py file (functions.py) and connect them
@@ -281,12 +281,14 @@ def getGroupById(group_id):
     if doc.exists:
         dict = doc.to_dict()
         dict["id"] = group_id
-        docs = db.collection(u'scheme').where(u'group_id', u'==', group_id).stream()
-        if docs:
-            for doc in docs:
-                dict_scheme = doc.to_dict()
-                dict_scheme["id"] = doc.id
+        docs_scheme = db.collection(u'scheme').where(u'assigned_to', u'==', group_id).stream()
+        if docs_scheme:
+            for doc_scheme in docs_scheme:
+                dict_scheme = doc_scheme.to_dict()
+
+                dict_scheme["id"] = doc_scheme.id
                 schemes.append(dict_scheme)
+
         return schemes, dict
     else:
         return schemes, []
@@ -378,7 +380,6 @@ def index():
 @blueprint.route('/room-detail/<room_id>', methods=['GET', 'POST'])
 @login_required
 def room(room_id):
-    days_of_week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
     if request.method == 'POST':
         if 'name' in request.form or 'location' in request.form:
             editRoom(request.form, room_id)
@@ -463,15 +464,13 @@ def user_types(type):
 @blueprint.route('/group-detail/<group_id>', methods=['GET', 'POST'])
 @login_required
 def group(group_id):
-    if getGroupById(group_id) and getAllGroups():
-        #groupname = getGroupById(group_id)
-        schemes, dict = getGroupById(group_id)
-        groupmembers = getUsersByGroup(group_id)
-        #groups = getAllGroups()
-        return render_template('home/group-detail.html', segment='group-detail', schemes=schemes, group=dict,
-                               groupmembers=groupmembers)
-    else:
-        return render_template('home/group-detail.html', segment='group-detail', groupname=None)
+    #if getGroupById(group_id) and getAllGroups():
+    schemes, dict = getGroupById(group_id)
+    groupmembers = getUsersByGroup(group_id)
+    return render_template('home/group-detail.html', segment='group-detail', schemes=schemes, group=dict,
+                           groupmembers=groupmembers, days_of_week=days_of_week)
+    #else:
+    #    return render_template('home/group-detail.html', segment='group-detail', groupname=None)
 
 @blueprint.route('/logging')
 @login_required

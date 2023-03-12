@@ -92,7 +92,9 @@
                     <th scope="col" class="sort" data-sort="name">Campus ID</th>
                     <th scope="col" class="sort" data-sort="budget">Lastname</th>
                     <th scope="col" class="sort" data-sort="status">Firstname</th>
-                    <th scope="col" class="sort" data-sort="status">Class</th>
+                    {% if type in ("All", "Students") %}
+                      <th scope="col" class="sort" data-sort="status">Class</th>
+                    {% endif %}
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -102,7 +104,9 @@
                       <td>{{ user['id'] }}</td>
                       <td>{{ user['lastname'] }}</td>
                       <td>{{ user['firstname'] }}</td>
-                      <td>{{ user['classname'] }}</td>
+                      {% if type in ("All", "Students") %}
+                        <td>{{ user['classname'] }}</td>
+                      {% endif %}
                        <td class="text-right">
                         <div class="dropdown">
                           <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
