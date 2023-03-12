@@ -154,7 +154,9 @@
                     <th scope="col" class="sort" data-sort="name">Groupname</th>
                     <th scope="col" class="sort" data-sort="budget">Number of members</th>
                     <th scope="col"></th>
-                    <th scope="col"></th>
+                    {% if type == "Groups" %}
+                      <th scope="col"></th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
@@ -166,18 +168,20 @@
                       <td><form action="/group-detail/{{group['id']}}">
                         <button type="submit">See details</button>
                       </form></td>
-                       <td class="text-right">
-                        <div class="dropdown">
-                          <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                      {% if type == "Groups" %}
+                        <td class="text-right">
+                          <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                              <a class="dropdown-item" href="#">Action</a>
+                              <a class="dropdown-item" href="#">Another action</a>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
+                      {% endif %}
 
                     </tr>
                 {% endfor %}
