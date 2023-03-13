@@ -20,6 +20,11 @@
                 </ol>
               </nav>
             </div>
+            <div class="col-lg-6 col-5 text-right">
+              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteGroup">
+                Delete this group
+              </button>
+            </div>
           </div>
           <!-- Card stats -->
           <div class="row">
@@ -177,6 +182,29 @@
 
     </div>
 
+    <!-- Delete group confirmation -->
+    <div class="modal fade" id="deleteGroup" tabindex="-1" role="dialog" aria-labelledby="deleteGroupLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteGroupLabel">Delete {{ group['groupname'] }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <p>Are you sure you want to delete this group? The associated schemes will be deleted as well.</p>
+
+          </div>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="/group-detail/{{ group['id'] }}/delete-group" class="btn btn-danger">Confirm</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <!-- Add scheme modal-->
     <div class="modal fade" id="addScheme" tabindex="-1" role="dialog" aria-labelledby="addSchemeLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -251,6 +279,7 @@
         </div>
       </div>
     </div>
+
 
 
 {% endblock content %}

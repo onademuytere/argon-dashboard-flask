@@ -310,6 +310,28 @@ def getClassById(class_id):
         return groupname
 
 
+def deleteGroup(group_id):
+    # first delete the schemes associated with this room
+    doc_scheme = db.collection(u'scheme').where(u'assigned_to', u'==', group_id).get()
+
+    if doc_scheme:
+        batch = db.batch()
+        for doc in doc_scheme:
+            batch.delete(doc.reference)
+        batch.commit()
+
+    # delete the group where user is assigned to
+    all_users = getUsers()
+    for user in all_users:
+        print(user["id"])
+        user_ref = db.collection(u'user').document(user["id"])
+
+        user_ref.update({u'group_id': firestore.ArrayRemove([group_id])})
+
+
+    # delete the room itself
+    db.collection(u'group').document(group_id).delete()
+
 
 def getLogs():
     logs = []
@@ -545,6 +567,12 @@ def group(group_id):
 
     #else:
     #    return render_template('home/group-detail.html', segment='group-detail', groupname=None)
+
+@blueprint.route('/group-detail/<group_id>/delete-group', methods=['GET', 'POST'])
+@login_required
+def group_delete(group_id):
+    deleteGroup(group_id)
+    return group_types("Groups")
 
 
 @blueprint.route('/logging')
