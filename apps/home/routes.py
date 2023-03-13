@@ -65,7 +65,8 @@ def getRoomById(room_id):
                 dict_scheme = doc.to_dict()
                 dict_scheme["id"] = doc.id
                 schemes.append(dict_scheme)
-        return schemes, dict
+        last_unlocked = getHistoryRoom(room_id, True)
+        return schemes, dict, last_unlocked
     else:
         return schemes, []
 
@@ -348,7 +349,7 @@ def getLogs():
                 dict["name"] = dict['user_id']
             else:
                 dict["name"] = user['lastname'] + " " + user['firstname']
-            scheme, room_info = getRoomById(dict['room_id'])
+            scheme, room_info, _ = getRoomById(dict['room_id'])
             if room_info is None:
                 dict["room"] = "Unknown"
             else:
@@ -359,14 +360,19 @@ def getLogs():
     else:
         return None
 
-def getHistoryRoom(room_id):
+
+def getHistoryRoom(room_id, filter=None):
     logs = []
     docs = None
+    # als filter == True:
+        # filteren op date descending en enkel deze outputten
+        #  _, _, last_unlocked = getRoomById(dict['room_id'])
     docs = db.collection(u'logging').stream()
     if docs:
         for doc in docs:
             dict = doc.to_dict()
             if dict["room_id"] == room_id:
+
                 dict["id"] = doc.id
                 dict["date"] = doc.to_dict()['datetime'].date()
                 dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
@@ -375,7 +381,7 @@ def getHistoryRoom(room_id):
                     dict["name"] = dict['user_id']
                 else:
                     dict["name"] = user['lastname'] + " " + user['firstname']
-                scheme, room_info = getRoomById(dict['room_id'])
+                scheme, room_info, _ = getRoomById(dict['room_id'])
                 if room_info is None:
                     dict["room"] = "Unknown"
                 else:
