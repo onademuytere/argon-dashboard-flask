@@ -115,6 +115,7 @@ def getUserById(user_id):
     else:
         return None
 
+
 def getUsersByGroup(group_id):
     users = []
     doc = db.collection(u'user').stream()
@@ -129,6 +130,13 @@ def getUsersByGroup(group_id):
     else:
         return None
 
+
+def addUserToGroup(userid, groupid):
+    print("test user added to group")
+    data = {
+        u'group_id': firestore.ArrayUnion([groupid])
+    }
+    db.collection(u'user').document(userid).update(data)
 
 
 # All scheme functions
@@ -479,6 +487,15 @@ def user_types(type):
         return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
     else:
         return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
+
+
+@blueprint.route('/users/<userid>/add-to-group/<groupid>', methods=['GET', 'POST'])
+@login_required
+def user_to_group(userid, groupid):
+    addUserToGroup(userid, groupid)
+    return group(groupid)
+    #return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
+
 
 
 @blueprint.route('/groups', methods=['GET', 'POST'])

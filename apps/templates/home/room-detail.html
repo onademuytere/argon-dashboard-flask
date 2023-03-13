@@ -258,7 +258,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteSchemeLabel">Delete </h5>
+            <h5 class="modal-title" id="deleteSchemeLabel">Delete</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -269,7 +269,7 @@
           </div>
           <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <a href="/room-detail/!!!scheme_id!!!/delete-scheme" name="schemeId" id="schemeId" class="btn btn-danger">Confirm</a>
+                <a href="/" name="schemeId" id="schemeId" class="btn btn-danger">Confirm</a>
           </div>
 
         </div>
@@ -301,10 +301,6 @@
       $(document).on("click", ".open-deleteScheme", function () {
         var mySchemeId = $(this).data('id');
         $(".modal-footer #schemeId").attr("href", "/room-detail/" + mySchemeId + "/delete-scheme");
-
-        // As pointed out in comments,
-        // it is unnecessary to have to manually call the modal.
-        // $('#addBookDialog').modal('show');
       });
   </script>
 

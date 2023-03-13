@@ -96,9 +96,9 @@
                         <td>{{ user['classname'] }}</td>
                       {% endif %}
                        <td class="text-right">
-                            <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#addToGroup">
-                              Add to group
-                            </button>
+                         <button type="button" class="open-addUserToGroup btn btn-sm btn-neutral" data-id="{{ user['id'] }}" data-toggle="modal" data-target="#addToGroup">
+                           Add to group
+                         </button>
                       </td>
                     </tr>
                 {% endfor %}
@@ -202,7 +202,7 @@
           <div class="modal-body">
             <form role="form" method="post">
               <div class="form-group">
-                <label for="selectGroup">Select group to add to</label>
+                <label for="selectGroup">Select group to add the user to</label>
                 <div class="input-group input-group-merge input-group-alternative mb-3">
                   <select class="form-control" name="selectGroup" id="selectGroup">
                     {% for group in groups %}
@@ -213,8 +213,10 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="/" name="userId" id="userId" class="btn btn-danger">Confirm</a>
+                <!--<a href="/users/!!!user_id!!!/add-to-group/!!!group_id!!!" name="userId" id="userId" class="btn btn-danger">Confirm</a>-->
+
               </div>
             </form>
           </div>
@@ -232,5 +234,14 @@
 
   <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
   <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+  <script>
+    $(document).on("click", ".open-addUserToGroup", function () {
+      var myUserId = $(this).data('id');
+      var e = document.getElementById("selectGroup");
+      var groupId = e.value;
+      $(".modal-footer #userId").attr("href", "/users/" + myUserId + "/add-to-group/" + groupId);
+    });
+  </script>
 
 {% endblock javascripts %}
