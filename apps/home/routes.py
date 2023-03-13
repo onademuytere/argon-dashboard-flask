@@ -359,6 +359,32 @@ def getLogs():
     else:
         return None
 
+def getHistoryRoom(room_id):
+    logs = []
+    docs = None
+    docs = db.collection(u'logging').stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            if dict["room_id"] == room_id:
+                dict["id"] = doc.id
+                dict["date"] = doc.to_dict()['datetime'].date()
+                dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
+                user = getUserById(dict['user_id'])
+                if user is None:
+                    dict["name"] = dict['user_id']
+                else:
+                    dict["name"] = user['lastname'] + " " + user['firstname']
+                scheme, room_info = getRoomById(dict['room_id'])
+                if room_info is None:
+                    dict["room"] = "Unknown"
+                else:
+                    dict["room"] = room_info['roomname']
+
+                logs.append(dict)
+        return logs
+    else:
+        return None
 
 def getParameters():
     parameters = db.collection(u'general_parameters').document(u'parameters').get()
@@ -584,6 +610,20 @@ def logging():
         return render_template('home/logging.html', segment='logging', logs=logs)
     else:
         return render_template('home/logging.html', segment='logging', logs=None)
+
+
+@blueprint.route('/history-room/<room_id>', methods=['GET', 'POST'])
+@login_required
+def history_room(room_id):
+    data = None
+    if room_id:
+        data = getHistoryRoom(room_id)
+        _, dict = getRoomById(room_id)
+    if data is not None:
+        return render_template('home/history-room.html', segment='history-room', data=data, dict=dict)
+    else:
+        return render_template('home/history-room.html', segment='history-room', data=None)
+
 
 @blueprint.route('/settings', methods=['GET', 'POST'])
 @login_required
