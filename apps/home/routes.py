@@ -620,7 +620,7 @@ def history_room(room_id):
         data = getHistoryRoom(room_id)
         _, dict = getRoomById(room_id)
     if data is not None:
-        return render_template('home/history-room.html', segment='history-room', data=data, dict=dict)
+        return render_template('home/history-room.html', segment='history-room', logs=data, dict=dict)
     else:
         return render_template('home/history-room.html', segment='history-room', data=None)
 
