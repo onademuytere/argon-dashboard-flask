@@ -58,7 +58,6 @@
       </div>
     </div>
 
-      {% if type in ("All", "Teachers", "Students") %}
       <div class="container-fluid mt--6">
       <div class="row">
         <div class="col-xl-12">
@@ -97,16 +96,9 @@
                         <td>{{ user['classname'] }}</td>
                       {% endif %}
                        <td class="text-right">
-                        <div class="dropdown">
-                          <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </div>
+                            <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#addToGroup">
+                              Add to group
+                            </button>
                       </td>
                     </tr>
                 {% endfor %}
@@ -120,71 +112,7 @@
       {% include "includes/footer.html" %}
 
     </div>
-      {% else %}
-      <div class="container-fluid mt--6">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="card">
-            <div class="card-header border-0">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h3 class="mb-0">Users</h3>
-                </div>
-                <div class="col text-right">
-                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <!-- groups table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col" class="sort" data-sort="name">Groupname</th>
-                    <th scope="col" class="sort" data-sort="budget">Number of members</th>
-                    <th scope="col"></th>
-                    {% if type == "Groups" %}
-                      <th scope="col"></th>
-                    {% endif %}
-                  </tr>
-                </thead>
-                <tbody>
-                {% for group in data %}
-                    <tr>
 
-                      <td>{{ group['groupname'] }}</td>
-                      <td>{{ group['number'] }}</td>
-                      <td><form action="/group-detail/{{group['id']}}">
-                        <button type="submit">See details</button>
-                      </form></td>
-                      {% if type == "Groups" %}
-                        <td class="text-right">
-                          <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                          </div>
-                        </td>
-                      {% endif %}
-
-                    </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {% include "includes/footer.html" %}
-
-    </div>
-      {% endif %}
     <!-- Page content for students -->
       <div id="students" class="container-fluid mt--6 collapse">
     <div class="row">
@@ -261,24 +189,40 @@
 
   </div>
 
-    <!-- Page content for groups -->
+    <!-- Modal to add user to a group -->
+    <div class="modal fade" id="addToGroup" tabindex="-1" role="dialog" aria-labelledby="addToGroupLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToGroupLabel">Add person to a group</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="post">
+              <div class="form-group">
+                <label for="selectGroup">Select group to add to</label>
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <select class="form-control" name="selectGroup" id="selectGroup">
+                    {% for group in groups %}
+                      <option value="{{ group['id'] }}">{{ group['groupname'] }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
 
-    <div class="row">
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample3">
-          <div class="card card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+              </div>
+            </form>
           </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample2">
-          <div class="card card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-          </div>
+
         </div>
       </div>
     </div>
+
 
 
 {% endblock content %}

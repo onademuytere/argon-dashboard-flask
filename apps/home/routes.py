@@ -458,11 +458,12 @@ def scheme_delete(scheme_id):
 def users():
     #if getStudents() and getTeachers() and getClasses() and getNonClasses():
     data = getUsers()
+    groups = getNonDefaultGroups()
 
     """else:
         return render_template('home/users.html', segment='users', students=[], teachers=[], classes=[], nonclasses=[])
     """
-    return render_template('home/users.html', segment='users', type="All", data=data)
+    return render_template('home/users.html', segment='users', type="All", data=data, groups=groups)
 
 
 @blueprint.route('/users/<type>', methods=['GET', 'POST'])
@@ -473,10 +474,11 @@ def user_types(type):
         data = getStudents()
     elif type == "Teachers":
         data = getTeachers()
+    groups = getNonDefaultGroups()
     if data is not None:
-        return render_template('home/users.html', segment='users', type=type, data=data)
+        return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
     else:
-        return render_template('home/users.html', segment='users', type=None, data=None)
+        return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
 
 
 @blueprint.route('/groups', methods=['GET', 'POST'])
