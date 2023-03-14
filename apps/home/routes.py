@@ -268,6 +268,15 @@ def getNonDefaultGroups():
         return None
 
 
+def addGroup(groupname):
+
+    data = {
+        u'groupname': groupname,
+        u'is_class': False,
+    }
+    db.collection(u'group').add(data)
+
+
 # All groups
 def getAllGroups():
     groups = []
@@ -586,6 +595,9 @@ def groups():
 @login_required
 def group_types(type):
     data = None
+    if request.method == 'POST':
+        if 'name' in request.form:
+            addGroup(request.form['name'])
     if type == "Groups":
         data = getNonDefaultGroups()
     if data is not None:

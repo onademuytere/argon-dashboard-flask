@@ -39,15 +39,12 @@
 
               {% if type != "Groups" %}
                 <a href="/groups" class="btn btn-sm btn-danger">Default groups</a>
+                <a href="/groups/Groups" class="btn btn-sm btn-neutral">Groups</a>
               {% else %}
                 <a href="/groups" class="btn btn-sm btn-neutral">Default groups</a>
+                <a href="/groups/Groups" class="btn btn-sm btn-danger">Groups</a>
               {% endif %}
 
-              {% if type == "Groups" %}
-                <a href="/groups/Groups" class="btn btn-sm btn-danger">Groups</a>
-              {% else %}
-                <a href="/groups/Groups" class="btn btn-sm btn-neutral">Groups</a>
-              {% endif %}
             </div>
           </div>
           <!-- Card stats -->
@@ -65,6 +62,11 @@
                   <h3 class="mb-0">Groups</h3>
                 </div>
                 <div class="col text-right">
+                  {% if type == "Groups" %}
+                    <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#addGroup">
+                      Add a new group
+                    </button>
+                  {% endif %}
                   <a href="#!" class="btn btn-sm btn-primary">See all</a>
                 </div>
               </div>
@@ -175,26 +177,39 @@
 
     {% include "includes/footer.html" %}
 
+  <-- Modal to add the group -->
   </div>
-
-    <!-- Page content for groups -->
-
-    <div class="row">
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample3">
-          <div class="card card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+    <div class="modal fade" id="addGroup" tabindex="-1" role="dialog" aria-labelledby="addGroupLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addGroupLabel">Add a room</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample2">
-          <div class="card card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+          <div class="modal-body">
+            <form role="form" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <div class="input-group input-group-merge input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-building"></i></span>
+                  </div>
+                  <input name="name" class="form-control" placeholder="Name of group" type="text">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add group</button>
+              </div>
+            </form>
           </div>
+
         </div>
       </div>
     </div>
+
+
 
 
 {% endblock content %}
