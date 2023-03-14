@@ -361,36 +361,56 @@ def getLogs():
         return None
 
 
-def getHistoryRoom(room_id, filter=None):
+def getHistoryRoom(room_id, first=None):
     logs = []
     docs = None
-    # als filter == True:
-        # filteren op date descending en enkel deze outputten
-        #  _, _, last_unlocked = getRoomById(dict['room_id'])
-    docs = db.collection(u'logging').stream()
-    if docs:
-        for doc in docs:
-            dict = doc.to_dict()
-            if dict["room_id"] == room_id:
-
-                dict["id"] = doc.id
-                dict["date"] = doc.to_dict()['datetime'].date()
-                dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
-                user = getUserById(dict['user_id'])
+    if first:
+        logging_ref = db.collection(u'logging').where(u'room_id', '==', room_id)
+        query = logging_ref.order_by(u'datetime', direction=firestore.Query.DESCENDING).limit(1)
+        """query = logging_ref.order_by(
+            u'datetime', direction=firestore.Query.DESCENDING).limit(0)
+        """
+        result = query.stream()
+        #print("result:", result)
+        #print("dictionary", result.to_dict())
+        if result:
+            for r in result:
+                dict_r = r.to_dict()
+                dict_r["id"] = r.id
+                dict_r["date"] = r.to_dict()['datetime'].date()
+                dict_r["time"] = r.to_dict()['datetime'].strftime("%H:%M:%S")
+                user = getUserById(dict_r['user_id'])
                 if user is None:
-                    dict["name"] = dict['user_id']
+                    dict_r["name"] = dict_r['user_id']
                 else:
-                    dict["name"] = user['lastname'] + " " + user['firstname']
-                scheme, room_info, _ = getRoomById(dict['room_id'])
-                if room_info is None:
-                    dict["room"] = "Unknown"
-                else:
-                    dict["room"] = room_info['roomname']
-
-                logs.append(dict)
+                    dict_r["name"] = user['lastname'] + " " + user['firstname']
+                #print("dictionary", dict_r)
+                logs.append(dict_r)
         return logs
+        # filteren op date descending en enkel deze outputten
+
     else:
-        return None
+        docs = db.collection(u'logging').stream()
+        if docs:
+            for doc in docs:
+                dict = doc.to_dict()
+                if dict["room_id"] == room_id:
+                    dict["id"] = doc.id
+                    dict["date"] = doc.to_dict()['datetime'].date()
+                    dict["time"] = doc.to_dict()['datetime'].strftime("%H:%M:%S")
+                    user = getUserById(dict['user_id'])
+                    if user is None:
+                        dict["name"] = dict['user_id']
+                    else:
+                        dict["name"] = user['lastname'] + " " + user['firstname']
+                    scheme, room_info, _ = getRoomById(room_id)
+                    if room_info is None:
+                        dict["room"] = "Unknown"
+                    else:
+                        dict["room"] = room_info['roomname']
+
+                    logs.append(dict)
+            return logs
 
 def getParameters():
     parameters = db.collection(u'general_parameters').document(u'parameters').get()
@@ -481,10 +501,10 @@ def room(room_id):
             addScheme(schedule_week, group_id, room_id)
 
     if getRoomById(room_id) and getAllGroups():
-        schemes, dict = getRoomById(room_id)
+        schemes, dict, lastUnlocked = getRoomById(room_id)
         groups = getAllGroups()
         return render_template('home/room-detail.html', segment='room-detail', room=dict, schemes=schemes,
-                               days_of_week=days_of_week, groups=groups)
+                               days_of_week=days_of_week, groups=groups, lastUnlocked=lastUnlocked)
     else:
         return render_template('home/room-detail.html', segment='room-detail', room=None, schemes=None,
                                days_of_week=days_of_week, groups=None)
@@ -624,7 +644,7 @@ def history_room(room_id):
     data = None
     if room_id:
         data = getHistoryRoom(room_id)
-        _, dict = getRoomById(room_id)
+        _, dict, _ = getRoomById(room_id)
     if data is not None:
         return render_template('home/history-room.html', segment='history-room', logs=data, dict=dict)
     else:

@@ -20,11 +20,13 @@
                 </ol>
               </nav>
             </div>
+            {% if group["is_class"] == False %}
             <div class="col-lg-6 col-5 text-right">
               <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteGroup">
                 Delete this group
               </button>
             </div>
+            {% endif %}
           </div>
           <!-- Card stats -->
           <div class="row">
