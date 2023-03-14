@@ -338,15 +338,20 @@ def deleteGroup(group_id):
 
         user_ref.update({u'group_id': firestore.ArrayRemove([group_id])})
 
-
     # delete the room itself
     db.collection(u'group').document(group_id).delete()
+
+
+def deleteUserFromGroup(group_id, user_id):
+    user_ref = db.collection(u'user').document(user_id)
+
+    user_ref.update({u'group_id': firestore.ArrayRemove([group_id])})
 
 
 def getLogs():
     logs = []
     docs = None
-    docs = db.collection(u'logging').stream()
+    docs = db.collection(u'logging').order_by(u'datetime', direction=firestore.Query.DESCENDING).stream()
     if docs:
         for doc in docs:
             dict = doc.to_dict()
@@ -637,6 +642,12 @@ def group(group_id):
 def group_delete(group_id):
     deleteGroup(group_id)
     return group_types("Groups")
+
+@blueprint.route('/group-detail/<group_id>/delete-user/<user_id>', methods=['GET', 'POST'])
+@login_required
+def group_delete_user(group_id, user_id):
+    deleteUserFromGroup(group_id, user_id)
+    return group(group_id)
 
 
 @blueprint.route('/logging')
