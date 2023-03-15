@@ -18,9 +18,9 @@
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                    <li class="breadcrumb-item"><a href="/groups">Groups</a></li>
                       {% if type == "Groups" %}
-                        <li class="breadcrumb-item active" aria-current="page">{{type}} </li>
+                        <li class="breadcrumb-item active" aria-current="page">Custom groups</li>
                       {% else %}
-                        <li class="breadcrumb-item active" aria-current="page">Default groups </li>
+                        <li class="breadcrumb-item active" aria-current="page">iBaMaFlex! groups</li>
                       {% endif %}
 
                 </ol>
@@ -38,11 +38,11 @@
             <div class="col-lg-6 col-5 text-right">
 
               {% if type != "Groups" %}
-                <a href="/groups" class="btn btn-sm btn-danger">Default groups</a>
-                <a href="/groups/Groups" class="btn btn-sm btn-neutral">Groups</a>
+                <a href="/groups" class="btn btn-sm btn-danger">iBaMaFlex! groups</a>
+                <a href="/groups/Groups" class="btn btn-sm btn-neutral">Custom groups</a>
               {% else %}
-                <a href="/groups" class="btn btn-sm btn-neutral">Default groups</a>
-                <a href="/groups/Groups" class="btn btn-sm btn-danger">Groups</a>
+                <a href="/groups" class="btn btn-sm btn-neutral">iBaMaFlex! groups</a>
+                <a href="/groups/Groups" class="btn btn-sm btn-danger">Custom groups</a>
               {% endif %}
 
             </div>
