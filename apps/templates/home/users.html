@@ -206,17 +206,17 @@
                 <div class="input-group input-group-merge input-group-alternative mb-3">
                   <select class="form-control" name="selectGroup" id="selectGroup">
                     {% for group in groups %}
-                      <option value="{{ group['id'] }}">{{ group['groupname'] }}</option>
+                      <option value="{{ group['id'] }}">{{ group['groupname'] }} </option>
                     {% endfor %}
                   </select>
                 </div>
+                <input hidden name="useridentifier" id="useridentifier" placeholder="Ok" type="text" value="">
+
               </div>
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <a href="/" name="userId" id="userId" class="btn btn-danger">Confirm</a>
-                <!--<a href="/users/!!!user_id!!!/add-to-group/!!!group_id!!!" name="userId" id="userId" class="btn btn-danger">Confirm</a>-->
-
+                <button type="confirm" class="btn btn-primary" >Confirm</button>
               </div>
             </form>
           </div>
@@ -236,12 +236,15 @@
   <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
 
   <script>
+
     $(document).on("click", ".open-addUserToGroup", function () {
       var myUserId = $(this).data('id');
       var e = document.getElementById("selectGroup");
       var groupId = e.value;
-      $(".modal-footer #userId").attr("href", "/users/" + myUserId + "/add-to-group/" + groupId);
+      $(".modal-body #useridentifier").val(myUserId)
+      // $(".modal-footer #userId").attr("href", "/users/" + myUserId + "/add-to-group");
     });
   </script>
+
 
 {% endblock javascripts %}

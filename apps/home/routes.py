@@ -552,7 +552,12 @@ def scheme_delete(scheme_id):
 @blueprint.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
-    #if getStudents() and getTeachers() and getClasses() and getNonClasses():
+    if request.method == 'POST':
+        groupid = request.form.get('selectGroup')
+        userid = request.form.get('useridentifier')
+        addUserToGroup(userid, groupid)
+        return group(groupid)
+
     data = getUsers()
     groups = getNonDefaultGroups()
 
@@ -566,6 +571,11 @@ def users():
 @login_required
 def user_types(type):
     data = None
+    if request.method == 'POST':
+        groupid = request.form.get('selectGroup')
+        userid = request.form.get('useridentifier')
+        addUserToGroup(userid, groupid)
+        return group(groupid)
     if type == "Students":
         data = getStudents()
     elif type == "Teachers":
@@ -577,11 +587,17 @@ def user_types(type):
         return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
 
 
-@blueprint.route('/users/<userid>/add-to-group/<groupid>', methods=['GET', 'POST'])
+@blueprint.route('/users/<user_id>/add-to-group', methods=['GET', 'POST'])
 @login_required
-def user_to_group(userid, groupid):
-    addUserToGroup(userid, groupid)
-    return group(groupid)
+def user_to_group(user_id):
+    if request.method == 'POST':
+        print("yes")
+        groupid = request.form.get('selectGroup')
+        addUserToGroup(user_id, groupid)
+        return group(groupid)
+    else:
+        print("no")
+        return users()
     #return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
 
 
@@ -614,7 +630,7 @@ def group_types(type):
 @blueprint.route('/group-detail/<group_id>', methods=['GET', 'POST'])
 @login_required
 def group(group_id):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form['useridentifier'] is None:
         room_id = request.form.get('selectGroup')
         schedule_week = {}
         for day in days_of_week:
