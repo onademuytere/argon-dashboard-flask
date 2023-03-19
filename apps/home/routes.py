@@ -164,7 +164,18 @@ def getUsers(search=None):
     users = []
     docs = None
     if search:
+        print(search)
         # search in firstnames, lastnames and id
+        splitted_search = search.title().split()
+        docs_firstname = db.collection(u'user').where(u'firstname', u'in', splitted_search).get()
+        docs_lastname = db.collection(u'user').where(u'lastname', u'in', splitted_search).get()
+        docs_campusid = db.collection(u'user').where(u'lastname', u'in', splitted_search).get()
+
+        #docs = db.collection(u'user').where(search, u'in', [u'firstname', u'lastname'])
+
+        if docs:
+            for doc in docs:
+                print(doc.to_dict())
     else:
         docs = db.collection(u'user').stream()
         if docs:
@@ -574,7 +585,8 @@ def user_types(type):
     if request.method == 'POST':
         if 'search' in request.form:
             if type == "All":
-                data = getUsers(request.form.get('search'))
+                print(request.form.get('search'))
+                getUsers(request.form.get('search'))
         else:
             groupid = request.form.get('selectGroup')
             userid = request.form.get('useridentifier')
