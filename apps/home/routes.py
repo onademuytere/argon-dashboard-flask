@@ -160,23 +160,26 @@ def deleteScheme(scheme_id):
 
 
 # All user functions
-def getUsers():
+def getUsers(search=None):
     users = []
     docs = None
-    docs = db.collection(u'user').stream()
-    if docs:
-        for doc in docs:
-            dict = doc.to_dict()
-            dict["id"] = doc.id
-            classname = ""
-            if dict["is_teacher"] is False:
-                # classname = getGroupById(dict["class_id"])
-                classname = getClassById(dict["class_id"])
-            dict["classname"] = classname
-            users.append(dict)
-        return users
+    if search:
+        # search in firstnames, lastnames and id
     else:
-        return None
+        docs = db.collection(u'user').stream()
+        if docs:
+            for doc in docs:
+                dict = doc.to_dict()
+                dict["id"] = doc.id
+                classname = ""
+                if dict["is_teacher"] is False:
+                    # classname = getGroupById(dict["class_id"])
+                    classname = getClassById(dict["class_id"])
+                dict["classname"] = classname
+                users.append(dict)
+            return users
+        else:
+            return None
 
 
 # All students
@@ -548,7 +551,7 @@ def scheme_delete(scheme_id):
     else:
         return render_template('home/rooms.html', segment='rooms', rooms=[])
 
-
+"""
 @blueprint.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
@@ -561,21 +564,45 @@ def users():
     data = getUsers()
     groups = getNonDefaultGroups()
 
-    """else:
-        return render_template('home/users.html', segment='users', students=[], teachers=[], classes=[], nonclasses=[])
-    """
     return render_template('home/users.html', segment='users', type="All", data=data, groups=groups)
-
+"""
 
 @blueprint.route('/users/<type>', methods=['GET', 'POST'])
 @login_required
 def user_types(type):
     data = None
     if request.method == 'POST':
+        if 'search' in request.form:
+            if type == "All":
+                data = getUsers(request.form.get('search'))
+        else:
+            groupid = request.form.get('selectGroup')
+            userid = request.form.get('useridentifier')
+            addUserToGroup(userid, groupid)
+            return group(groupid)
+    if type == "All":
+        data = getUsers()
+    if type == "Students":
+        data = getStudents()
+    elif type == "Teachers":
+        data = getTeachers()
+    groups = getNonDefaultGroups()
+    if data is not None:
+        return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
+    else:
+        return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
+
+@blueprint.route('/users/<type>/<filter>', methods=['GET', 'POST'])
+@login_required
+def user_types_filtered(type, filter):
+    data = None
+    if request.method == 'POST':
         groupid = request.form.get('selectGroup')
         userid = request.form.get('useridentifier')
         addUserToGroup(userid, groupid)
         return group(groupid)
+    if type == "All":
+        data = getUsers(filter=filter)
     if type == "Students":
         data = getStudents()
     elif type == "Teachers":

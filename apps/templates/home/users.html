@@ -22,6 +22,7 @@
                 </ol>
               </nav>
             </div>
+
             <!--
             <div class="col-lg-6 col-5 text-right">
               <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Teachers</a>
@@ -65,7 +66,20 @@
             <div class="card-header border-0">
               <div class="row align-items-center">
                 <div class="col">
-                  <h3 class="mb-0">{{ type }}</h3>
+                  <form role="form" method="post" class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
+                    <div class="form-group mb-0">
+                      <div class="input-group input-group-alternative input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" name="search"> <i class="fas fa-search"></i></span>
+                        </div>
+                        <input class="form-control" name="search" id="search" placeholder="Search" type="text">
+                      </div>
+                    </div>
+                    <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </form>
+
                 </div>
                 <div class="col text-right">
                   <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -77,7 +91,9 @@
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col" class="sort" data-sort="name">Campus ID</th>
+                    <th scope="col" class="sort" data-sort="name">
+                      Campus ID
+                    </th>
                     <th scope="col" class="sort" data-sort="budget">Lastname</th>
                     <th scope="col" class="sort" data-sort="status">Firstname</th>
                     {% if type in ("All", "Students") %}
