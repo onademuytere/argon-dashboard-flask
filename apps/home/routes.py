@@ -162,22 +162,28 @@ def deleteScheme(scheme_id):
 
 
 # All user functions
-def getUsers(search=None, all=False):
+def getUsers(filterby=None, sort=None, all=False):
     users = []
     docs = None
-    if search:
-        print(search)
+    if filterby and sort:
+        print(filterby)
         # search in firstnames, lastnames and id
-        splitted_search = search.title().split()
-        docs_firstname = db.collection(u'user').where(u'firstname', u'in', splitted_search).get()
-        docs_lastname = db.collection(u'user').where(u'lastname', u'in', splitted_search).get()
+        if all:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).stream()
+
+        else:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).limit(20).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).limit(20).stream()
+
+
         #docs_campusid = db.collection(u'user').doc(search).get()
         #docs = db.collection(u'user').where(search, u'in', [u'firstname', u'lastname'])
 
-        if docs:
-            for doc in docs_firstname:
-                docs_firstname = doc.to_dict()
-                print("hier een test")
     elif all:
         docs = db.collection(u'user').order_by(u'lastname').stream()
     else:
@@ -196,10 +202,23 @@ def getUsers(search=None, all=False):
 
 
 # All students
-def getStudents(all=False):
+def getStudents(filterby=None, sort=None, all=False):
     students = []
     docs = None
-    if all:
+    if filterby and sort:
+        print(filterby)
+        # search in firstnames, lastnames and id
+        if all:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).stream()
+        else:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).limit(20).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).limit(20).stream()
+    elif all:
         docs = db.collection(u'user').order_by(u'lastname').stream()
     else:
         docs = db.collection(u'user').order_by(u'lastname').limit(20).stream()
@@ -217,10 +236,23 @@ def getStudents(all=False):
 
 
 # All teachers
-def getTeachers(all=False):
+def getTeachers(filterby=None, sort=None, all=False):
     teachers = []
     docs = None
-    if all:
+    if filterby and sort:
+        print(filterby)
+        # search in firstnames, lastnames and id
+        if all:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).stream()
+        else:
+            if sort == "asc":
+                docs = db.collection(u'user').order_by(filterby).limit(20).stream()
+            else:
+                docs = db.collection(u'user').order_by(filterby, direction=firestore.Query.DESCENDING).limit(20).stream()
+    elif all:
         docs = db.collection(u'user').order_by(u'lastname').stream()
     else:
         docs = db.collection(u'user').order_by(u'lastname').limit(20).stream()
@@ -570,21 +602,6 @@ def scheme_delete(scheme_id):
     else:
         return render_template('home/rooms.html', segment='rooms', rooms=[])
 
-"""
-@blueprint.route('/users', methods=['GET', 'POST'])
-@login_required
-def users():
-    if request.method == 'POST':
-        groupid = request.form.get('selectGroup')
-        userid = request.form.get('useridentifier')
-        addUserToGroup(userid, groupid)
-        return group(groupid)
-
-    data = getUsers()
-    groups = getNonDefaultGroups()
-
-    return render_template('home/users.html', segment='users', type="All", data=data, groups=groups)
-"""
 
 @blueprint.route('/users/<type>', methods=['GET', 'POST'])
 @login_required
@@ -638,6 +655,49 @@ def user_pagination(type):
         return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
 
 
+@blueprint.route('/users/<type>/<filter_by>/<sort>', methods=['GET', 'POST'])
+@login_required
+def user_filtering(type, filter_by, sort):
+    data = None
+
+    if type == "All":
+        data = getUsers(filterby=filter_by, sort=sort)
+    if type == "Students":
+        data = getStudents(filterby=filter_by, sort=sort)
+    elif type == "Teachers":
+        data = getTeachers(filterby=filter_by, sort=sort)
+
+    groups = getNonDefaultGroups()
+    if data is not None:
+        print("aaaa")
+
+        return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
+    else:
+        return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
+
+
+
+@blueprint.route('/users/<type>/<filter_by>/<sort>/see-all', methods=['GET', 'POST'])
+@login_required
+def user_filtering_all(type, filter_by, sort):
+    data = None
+
+    if type == "All":
+        data = getUsers(filterby=filter_by, sort=sort, all=True)
+    if type == "Students":
+        data = getStudents(filterby=filter_by, sort=sort, all=True)
+    elif type == "Teachers":
+        data = getTeachers(filterby=filter_by, sort=sort, all=True)
+
+    groups = getNonDefaultGroups()
+    if data is not None:
+        print("aaaa")
+
+        return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
+    else:
+        return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
+
+
 @blueprint.route('/users/<user_id>/add-to-group', methods=['GET', 'POST'])
 @login_required
 def user_to_group(user_id):
@@ -648,7 +708,7 @@ def user_to_group(user_id):
         return group(groupid)
     else:
         print("no")
-        return users()
+        return user_types("All")
     #return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
 
 
