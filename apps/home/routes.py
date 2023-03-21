@@ -11,6 +11,8 @@ from flask import Flask, session, render_template, request, redirect, jsonify
 from werkzeug.utils import secure_filename
 #from firestoreFunctions import plustwo
 from firebase_admin import credentials, firestore, initialize_app, storage
+from flask_paginate import Pagination, get_page_parameter
+
 
 
 # configuration for realtime database
@@ -160,7 +162,7 @@ def deleteScheme(scheme_id):
 
 
 # All user functions
-def getUsers(search=None):
+def getUsers(search=None, all=False):
     users = []
     docs = None
     if search:
@@ -169,35 +171,38 @@ def getUsers(search=None):
         splitted_search = search.title().split()
         docs_firstname = db.collection(u'user').where(u'firstname', u'in', splitted_search).get()
         docs_lastname = db.collection(u'user').where(u'lastname', u'in', splitted_search).get()
-        docs_campusid = db.collection(u'user').where(u'lastname', u'in', splitted_search).get()
-
+        #docs_campusid = db.collection(u'user').doc(search).get()
         #docs = db.collection(u'user').where(search, u'in', [u'firstname', u'lastname'])
 
         if docs:
-            for doc in docs:
-                print(doc.to_dict())
+            for doc in docs_firstname:
+                docs_firstname = doc.to_dict()
+                print("hier een test")
+    elif all:
+        docs = db.collection(u'user').order_by(u'lastname').stream()
     else:
-        docs = db.collection(u'user').stream()
-        if docs:
-            for doc in docs:
-                dict = doc.to_dict()
-                dict["id"] = doc.id
-                classname = ""
-                if dict["is_teacher"] is False:
-                    # classname = getGroupById(dict["class_id"])
-                    classname = getClassById(dict["class_id"])
-                dict["classname"] = classname
-                users.append(dict)
-            return users
-        else:
-            return None
+        docs = db.collection(u'user').order_by(u'lastname').limit(20).stream()
+    if docs:
+        for doc in docs:
+            dict = doc.to_dict()
+            dict["id"] = doc.id
+            classname = ""
+            if dict["is_teacher"] is False:
+                # classname = getGroupById(dict["class_id"])
+                classname = getClassById(dict["class_id"])
+            dict["classname"] = classname
+            users.append(dict)
+        return users
 
 
 # All students
-def getStudents():
+def getStudents(all=False):
     students = []
     docs = None
-    docs = db.collection(u'user').stream()
+    if all:
+        docs = db.collection(u'user').order_by(u'lastname').stream()
+    else:
+        docs = db.collection(u'user').order_by(u'lastname').limit(20).stream()
     if docs:
         for doc in docs:
             dict = doc.to_dict()
@@ -212,10 +217,13 @@ def getStudents():
 
 
 # All teachers
-def getTeachers():
+def getTeachers(all=False):
     teachers = []
     docs = None
-    docs = db.collection(u'user').stream()
+    if all:
+        docs = db.collection(u'user').order_by(u'lastname').stream()
+    else:
+        docs = db.collection(u'user').order_by(u'lastname').limit(20).stream()
     if docs:
         for doc in docs:
             dict = doc.to_dict()
@@ -581,6 +589,7 @@ def users():
 @blueprint.route('/users/<type>', methods=['GET', 'POST'])
 @login_required
 def user_types(type):
+    print("yuuuuw")
     data = None
     if request.method == 'POST':
         if 'search' in request.form:
@@ -598,29 +607,32 @@ def user_types(type):
         data = getStudents()
     elif type == "Teachers":
         data = getTeachers()
+
     groups = getNonDefaultGroups()
     if data is not None:
+        print(data)
+
         return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
     else:
         return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
 
-@blueprint.route('/users/<type>/<filter>', methods=['GET', 'POST'])
+
+@blueprint.route('/users/<type>/see-all', methods=['GET', 'POST'])
 @login_required
-def user_types_filtered(type, filter):
+def user_pagination(type):
     data = None
-    if request.method == 'POST':
-        groupid = request.form.get('selectGroup')
-        userid = request.form.get('useridentifier')
-        addUserToGroup(userid, groupid)
-        return group(groupid)
+
     if type == "All":
-        data = getUsers(filter=filter)
+        data = getUsers(all=True)
     if type == "Students":
-        data = getStudents()
+        data = getStudents(all=True)
     elif type == "Teachers":
-        data = getTeachers()
+        data = getTeachers(all=True)
+
     groups = getNonDefaultGroups()
     if data is not None:
+        print("aaaa")
+
         return render_template('home/users.html', segment='users', type=type, data=data, groups=groups)
     else:
         return render_template('home/users.html', segment='users', type=None, data=None, groups=groups)
